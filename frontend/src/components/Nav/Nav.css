@@ -1,26 +1,25 @@
 .navbar {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    background-color:#06b6d4;
-    border-bottom:5px solid black ;
-    padding: 15px 20px;
+    padding: 20px 20px;
   }
   
   .nav-logo {
     color: white;
     font-size: 24px;
     font-weight: bold;
+    margin-right: 60%  ;
   }
   
   .nav-links {
     list-style: none;
     display: flex;
-    gap: 20px;
+    gap: 10px;
   }
   
   .nav-links li {
     padding: 10px;
+    font-weight: bold;
   }
   
   .nav-links li a {
@@ -34,6 +33,8 @@
   }
   
   .burger {
+    position: relative;
+    z-index: 1;
     display: none;
     cursor: pointer;
     flex-direction: column;
@@ -66,10 +67,17 @@
   
     .burger {
       display: flex;
+      z-index: 9999;
     }
   
     .nav-links.nav-active {
       display: flex;
+    }
+    .navbar{
+      justify-content: space-between;
+    }
+    .nav-logo{
+      margin-right: 0;
     }
   }
   
@@ -82,5 +90,6 @@
     .burger {
       display: none;
     }
+    
   }
   

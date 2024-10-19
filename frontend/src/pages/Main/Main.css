@@ -1,0 +1,20 @@
+.main-body {
+    background-image: url('../../images/aerial_view_of_hawaii_beach-wallpaper-2560x1440.jpg');
+    width: 100vw;
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+
+@media screen and (max-width: 768px) {
+    .main-body {
+        background-image: url('../../images/aerial_view_of_hawaii_beach-wallpaper-2560x1440.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        height: 95vh;
+    }
+}

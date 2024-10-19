@@ -33,6 +33,7 @@ const Search = () => {
               initial={{ x: -20 }}
               whileInView={{ x: 0 }}
               transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
             >
               <input type="text" placeholder="Departure" />
             </motion.li>
@@ -40,6 +41,7 @@ const Search = () => {
             initial={{ x: -120 }}
             whileInView={{ x: 0 }}
             transition={{ duration: 1 }}
+            viewport={{ once: true }}
             
             >
               <input type="text" placeholder="Arrival" />
@@ -48,13 +50,17 @@ const Search = () => {
                initial={{ x: -220 }}
                whileInView={{ x: 0 }}
                transition={{ duration: 1.5 }}
+               viewport={{ once: true }}
             >
               <input type="date" />
             </motion.li>
             <motion.li
                initial={{ x: -320 }}
                whileInView={{ x: 0 }}
-               transition={{ duration: 2 }}>
+               transition={{ duration: 2 }}
+               viewport={{ once: true }}
+               >
+                
               <motion.button
                 whileHover={{
                   scale: 1.2,

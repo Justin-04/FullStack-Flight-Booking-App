@@ -6,10 +6,13 @@ import Search from '../../components/Search/Search'
 const Main = () => {
   return (
     <>
-    <Nav/>
+    <div className='main-body'>
+     <Nav/>
       <Welcome/>
-      <Search/>
-    </>
+     
+    </div>
+     <Search/> 
+     </>
   )
 }
 
