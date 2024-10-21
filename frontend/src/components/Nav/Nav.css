@@ -1,20 +1,23 @@
 .navbar {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     padding: 20px 20px;
+    margin-top: -10px;
+    text-wrap: nowrap;
   }
   
   .nav-logo {
     color: white;
     font-size: 24px;
     font-weight: bold;
-    margin-right: 60%  ;
   }
   
   .nav-links {
     list-style: none;
     display: flex;
     gap: 10px;
+    margin-right: 4% ;
   }
   
   .nav-links li {
@@ -75,6 +78,7 @@
     }
     .navbar{
       justify-content: space-between;
+      margin-top: 0;
     }
     .nav-logo{
       margin-right: 0;

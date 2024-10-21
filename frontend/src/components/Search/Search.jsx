@@ -1,32 +1,74 @@
 import React, { useState } from "react";
 import { Reorder, motion } from "framer-motion";
 import "./Search.css";
+import axios from "axios";
 
 const Search = () => {
-  const [flights, setFlights] = useState([
-    { id: 1, departure: "New York", destination: "London", date: "2024-11-10" },
-    {
-      id: 2,
-      departure: "Los Angeles",
-      destination: "Paris",
-      date: "2024-11-11",
-    },
-    { id: 3, departure: "Chicago", destination: "Tokyo", date: "2024-11-12" },
-    { id: 4, departure: "Miami", destination: "Berlin", date: "2024-11-13" },
-    {
-      id: 5,
-      departure: "San Francisco",
-      destination: "Dubai",
-      date: "2024-11-14",
-    },
-    { id: 6, departure: "Seattle", destination: "Rome", date: "2024-11-15" },
-  ]);
+  const [flights, setFlights] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [sortOption, setSortOption] = useState("");
 
+  const [departure, setDeparture] = useState("");
+  const [arrival, setArrival] = useState("");
+  const [date, setDate] = useState("");
+
+  const countries = [
+    "New York",
+    "Los Angeles",
+    "London",
+    "Paris",
+    "Tokyo",
+    "Berlin",
+    "Dubai",
+    "Rome",
+    "Cairo",
+    "Chicago",
+    "Beirut",
+    "FrankFurt",
+  ];
+
+  async function handleSearch() {
+    setLoading(true);
+    try {
+      const results = await axios.get("http://192.168.1.74:8080/");
+      setFlights(results.data);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const handleSort = (e) => {
+    const sortBy = e.target.value;
+    setSortOption(sortBy);
+
+    let sortedFlights = [...flights];
+    if (sortBy === "By Date") {
+      sortedFlights.sort((a, b) => new Date(a.Date) - new Date(b.Date));
+    } else if (sortBy === "By Price") {
+      sortedFlights.sort((a, b) => a.Price - b.Price);
+    } else if (sortBy === "By Duration") {
+      sortedFlights.sort((a, b) => a.Duration - b.Duration);
+    }
+
+    setFlights(sortedFlights);
+  };
+  const countriesFitlered=countries.filter(c=> c!=departure);
   return (
     <div className="search-body">
-      <div
-        className="results-c"
-      >
+      <center>
+        <motion.h1
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 2, duration: 1.5 }}
+        >
+          Search for Amazing <span>Flights</span>
+        </motion.h1>
+      </center>
+
+      <div className="results-c">
         <div className="topbar-search">
           <ul>
             <motion.li
@@ -35,78 +77,123 @@ const Search = () => {
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              <input type="text" placeholder="Departure" />
-            </motion.li>
-            <motion.li
-            initial={{ x: -120 }}
-            whileInView={{ x: 0 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true }}
-            
-            >
-              <input type="text" placeholder="Arrival" />
-            </motion.li>
-            <motion.li
-               initial={{ x: -220 }}
-               whileInView={{ x: 0 }}
-               transition={{ duration: 1.5 }}
-               viewport={{ once: true }}
-            >
-              <input type="date" />
-            </motion.li>
-            <motion.li
-               initial={{ x: -320 }}
-               whileInView={{ x: 0 }}
-               transition={{ duration: 2 }}
-               viewport={{ once: true }}
-               >
-                
-              <motion.button
-                whileHover={{
-                  scale: 1.2,
-                  transition: { duration: 1 },
-                }}
-                whileTap={{ scale: 0.9 }}
+              <select
+                value={departure}
+                onChange={(e) => setDeparture(e.target.value)}
               >
+                <option value="" disabled>
+                  Select Departure
+                </option>
+                {countries.map((country) => (
+                  <option key={country} value={country}>
+                    {country}
+                  </option>
+                ))}
+              </select>
+            </motion.li>
+
+            <motion.li
+              initial={{ x: -120 }}
+              whileInView={{ x: 0 }}
+              transition={{ duration: 1 }}
+              viewport={{ once: true }}
+            >
+              <select
+                value={arrival}
+                onChange={(e) => setArrival(e.target.value)}
+              >
+                <option value="" disabled>
+                  Select Arrival
+                </option>
+                {countriesFitlered.map((country) => (
+                  <option key={country} value={country}>
+                    {country}
+                  </option>
+                ))}
+              </select>
+            </motion.li>
+
+            <motion.li
+              initial={{ x: -220 }}
+              whileInView={{ x: 0 }}
+              transition={{ duration: 1.5 }}
+              viewport={{ once: true }}
+            >
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </motion.li>
+
+            <motion.li
+              initial={{ x: -220 }}
+              whileInView={{ x: 0 }}
+              transition={{ duration: 1.5 }}
+              viewport={{ once: true }}
+            >
+              <select name="Sort" value={sortOption} onChange={handleSort}>
+                <option value="" disabled>
+                  Sort By:
+                </option>
+                <option value="By Date">Date</option>
+                <option value="By Price">Price</option>
+                <option value="By Duration">Duration</option>
+              </select>
+            </motion.li>
+
+            <motion.li
+              initial={{ x: -220 }}
+              whileInView={{ x: 0 }}
+              transition={{ duration: 1.5 }}
+              viewport={{ once: true }}
+            >
+              <motion.button whileTap={{ scale: 0.9 }} onClick={handleSearch}>
                 Search
               </motion.button>
             </motion.li>
           </ul>
         </div>
 
-        <div
-          className="search-result"
-            >
-          <Reorder.Group axis="y" values={flights} onReorder={setFlights}>
-            {flights.map((flight) => (
-              <Reorder.Item
-                key={flight.id}
-                value={flight}
-                className="result-row"
-              >
-                <span className="column from">
-                  <strong>From:</strong> {flight.departure}
-                </span>
-                <span className="column to">
-                  <strong>To:</strong> {flight.destination}
-                </span>
-                <span className="column date">
-                  <strong>Date:</strong> {flight.date}
-                </span>
-                <span className="column action">
-                  <motion.button
-                    whileHover={{
-                      scale: 1.2,
-                    }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    Add to Cart
-                  </motion.button>
-                </span>
-              </Reorder.Item>
-            ))}
-          </Reorder.Group>
-        </div>
+        {loading ? (
+          <center>
+            <div className="loader"></div>
+          </center>
+        ) : (
+          <div className="search-result">
+            <Reorder.Group axis="y" values={flights} onReorder={setFlights}>
+              {flights.map((flight) => (
+                <Reorder.Item
+                  key={flight.FlightId}
+                  value={flight}
+                  className="result-row"
+                >
+                  <span className="column from">
+                    <strong>From:</strong> {flight.From}
+                  </span>
+                  <span className="column to">
+                    <strong>To:</strong> {flight.To}
+                  </span>
+                  <span className="column date">
+                    <strong>Date:</strong>{" "}
+                    {new Date(flight.Date).toLocaleDateString()}
+                  </span>
+                  <span className="column duration">
+                    <strong>Duration:</strong> {flight.Duration} hrs
+                  </span>
+                  <span className="column price">
+                    <strong>Price:</strong> ${flight.Price}
+                  </span>
+                  <span className="column action">
+                    <motion.button whileTap={{ scale: 0.9 }}>
+                      Add to Cart
+                    </motion.button>
+                  </span>
+                </Reorder.Item>
+              ))}
+            </Reorder.Group>
+          </div>
+        )}
       </div>
     </div>
   );
