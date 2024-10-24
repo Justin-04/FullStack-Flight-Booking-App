@@ -11,7 +11,8 @@ const Video1 = () => {
         </video>
         <div className="video-content">
            <h1>Kailua-Kona</h1> 
-        <span>  <img src={location} style={{width:"30px",height:"30px"}} alt="" />Hawai</span> <span>Available Now!</span>
+       <img src={location} style={{width:"30px",height:"30px",marginTop:"3px"}} alt="" /> 
+       <span>  Hawai</span> <span>Available Now!</span>
         </div>
       </div>
     </div>

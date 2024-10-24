@@ -7,9 +7,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 }
 .video-content{
+    justify-content: center;
     text-align: center;
+    overflow: hidden;
 }
 .video-content span{
     color: #fff;
@@ -26,25 +29,29 @@
 }
 .video-content img{
     filter: invert(100%) brightness(100%) contrast(100%);
+    position: relative;
+    left: 15px;
+    top: 8px;
+}
+
+.video-content span{
+    font-size: 26px;
+    padding: 10px;
+    
 }
 .back-video{
     position: absolute;
-    right: 0;
-    bottom: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: -1;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
 
 }
 
-@media (min-aspect-ratio: 16/9){
-    .back-video{
-        width: 100%;
-        height: auto;
-    }
-}
-
-@media (max-aspect-ratio: 16/9){
-    .back-video{
-        width: auto;
-        height: 100%;
-    }
+@media screen and (max-width: 768px) {
+ 
+  
 }

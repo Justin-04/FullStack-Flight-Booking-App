@@ -64,7 +64,7 @@
   }
   
   .flightmap-table{
-    margin-top: 370px;
+    margin-top: 150px;
     width: 100%;
     border-collapse: collapse;
   }
@@ -73,9 +73,7 @@
     margin: 8px;
     justify-content: space-between;
 }
-  .blue,.red,.green,.yellow{
- 
-  }
+
   .blue{
     color: #2563eb;
     background-color: #2563eb;
@@ -93,8 +91,41 @@
         width: 10px;
     }
 
+.left-section .description-flight div{
+margin: 20px;
+font-weight: 500 ;
+}
+
+.left-section .description-flight select{
+    padding: 10px;
+    border-radius: 10px;
+    
+}
+.left-section .description-flight div button{
+  padding: 20px;
+  margin-top: 50px ;
+  border-radius: 10px;
+  background-color: #2563eb;
+  color: white;
+  outline: none;
+  border: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .left-section .description-flight div button:hover{
+    background-color: #153985;
+    }
+  
 
   @media (max-width: 800px) {
+    .left-section .description-flight div {
+      margin: 5px;
+      }
+    .left-section .description-flight div button{
+      margin: 5px;
+      padding: 10px;
+   
+      }
+
     .flight-map {
       flex-direction: column;
       width: 100%;
@@ -106,9 +137,11 @@
     .left-section {
         overflow: hidden;
         width: 100%;
-      text-align: center;
+        text-align: center;
+        height: 30vh;
     }
     .flightmap-table{
-        margin-top: 40%;
-    }
+      margin-top: 9.5px;
+
+    } 
   }

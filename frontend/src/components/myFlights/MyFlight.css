@@ -55,12 +55,32 @@
     color: #555;
 
   }
+
+  .flight-info button{
+    width: 100%;
+    padding: 10px;
+    background-color: #323fbb;
+    color: white;
+    border-radius: 15px;
+    outline: none;
+    border: none;
+  }
+
+  .flight-info button:hover{
+    background-color: #202873;
+    cursor: pointer;
+  }
     @media (max-width: 768px) {
       .flight-info div{
         display: grid;
         grid-template-columns: repeat(2, 1fr);
+        
       }
       .myflights-grid{
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+      .flight-info button{
+        margin-top: 10px;
+        transform: translateX(50%);
       }
     }

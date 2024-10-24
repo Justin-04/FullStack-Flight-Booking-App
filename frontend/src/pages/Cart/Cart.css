@@ -1,0 +1,26 @@
+.main-cart{
+    width: 100%;
+    margin-top:20px ;
+
+}
+.completed-step {
+  background-color: green;
+  color: white;
+}
+.main-cart ul{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+}
+.main-cart ul li{
+  flex-basis: 200px;
+  margin: 10px;
+  border: 2px solid #e0e0e0;
+  border-radius: 15px;
+}
+
+.main-cart ul li:hover{
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+}

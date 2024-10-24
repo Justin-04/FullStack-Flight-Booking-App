@@ -11,7 +11,7 @@
 
 @media screen and (max-width: 768px) {
     .main-body {
-        background-image: url('../../images/aerial_view_of_hawaii_beach-wallpaper-2560x1440.jpg');
+        background-image: url('../../images/hawaiiWelcome.jpg');
         background-size: cover;
         background-position: center;
         background-attachment: scroll;

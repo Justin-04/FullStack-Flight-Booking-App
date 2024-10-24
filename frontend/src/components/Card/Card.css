@@ -1,0 +1,212 @@
+.card_body {
+    font: 16px "Helvetica Neue", Helvetica, sans-serif;
+    background: #d8d7d7;
+    color: #838181;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center-align items */
+}
+
+a {
+    color: #000;
+}
+
+.header {
+    text-align: center;
+    width: 100%; 
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 10px 0;
+    font-weight: 200;
+}
+
+.header__title {
+    font-size: 50px;
+    color: #333;
+}
+
+.header__subtitle {
+    font-size: 20px;
+    padding-bottom: 20px;
+}
+
+.header__body {
+    min-height: 32px;
+}
+
+.footer {
+    margin: 0 auto;
+    width: 100%; /* Full width for responsiveness */
+    max-width: 600px; /* Limit max width */
+    text-align: center;
+    padding: 0 0 30px 0;
+}
+
+.panel {
+    position: relative;
+    left: -20%;
+    margin-left: 20px;
+    justify-content: center; 
+    flex-wrap: wrap; 
+    width: 100%;
+    max-width: 500px; 
+    margin: 0 auto;
+    margin-bottom: 50px;
+    text-align: center;
+    float: left;
+}
+
+.card {
+    overflow: hidden;
+    font: 16px/1.5 'Helvetica Neue', Helvetica, sans-serif;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%; /* Full width for responsiveness */
+    max-width: 425px; /* Limit max width */
+    height: 270px;
+    text-align: left;
+    padding: 30px;
+    margin-bottom: 50px;
+    color: #fff;
+    border-radius: 20px;
+    box-sizing: border-box;
+    background: linear-gradient(45deg, #49a09d, #5f2c82);
+}
+
+.card__number {
+    font-size: 30px;
+    padding: 90px 0 15px;
+    text-align: center;
+}
+
+.card__expiry-date {
+    font-size: 14px;
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+.card__owner {
+    text-align: left;
+}
+
+.card__logo {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+}
+
+.card__strip {
+    background: #000;
+    height: 50px;
+    margin-bottom: 30px;
+}
+
+.card__signature {
+    float: left;
+    width: 65%;
+    height: 40px;
+    margin-left: 10px;
+    background: #999;
+}
+
+.card__ccv {
+    float: left;
+    margin-top: 5px;
+    padding: 7px;
+    background: #fff;
+    color: #111;
+    line-height: 1;
+}
+
+.card--front {
+    font-size: 16px;
+    font-family: 'Source Code Pro';
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .6);
+}
+
+.card--back {
+    padding-left: 0;
+    padding-right: 0;
+    text-align: left;
+}
+
+.input-fields {
+    position: relative;
+    top: -600px;
+    left: 200px;
+    margin: 20px auto;
+    text-align: center;
+    height: 400px;
+}
+
+.input-fields label {
+    display: block;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.input-fields input {
+    padding: 8px;
+    width: 200px; /* Width for desktop */
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+}
+
+.input-fields button{
+padding: 20px;
+color: white;
+background-color: #3937aa;
+outline: none;
+border: none;
+border-radius: 5px;
+}
+
+.input-fields button:hover{
+    scale: 1.1;
+    background-color: #2a28a3;
+    cursor: pointer;
+}
+
+
+/* Responsive Styles */
+@media (min-width: 600px) {
+   
+    .input-fields {
+      
+        flex-direction: row; /* Align inputs in a row */
+        justify-content: flex-end; /* Align inputs to the right */
+        width: 100%; /* Full width */
+    }
+
+    .input-fields label {
+        margin: 10px; /* Space between labels */
+    }
+
+    .input-fields input {
+        width: auto; /* Auto width for input fields */
+    }
+}
+
+@media (max-width: 880px) {
+    .card {
+        width: 90%; /* Allow the card to take up more width on small screens */
+        max-width: none; /* Remove max width constraint */
+    }
+
+    .input-fields {
+        position: static;
+        width: 100%; /* Full width for mobile */
+    }
+
+    .input-fields input {
+        width: 80%; /* Adjust width for mobile inputs */
+    }
+    .panel{
+        position:static;
+    }
+}
