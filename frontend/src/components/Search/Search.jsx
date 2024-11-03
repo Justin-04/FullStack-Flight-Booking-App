@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Reorder, motion } from "framer-motion";
 import "./Search.css";
 import axios from "axios";
 
-const Search = () => {
+const Search = ({ data1,userID }) => {
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sortOption, setSortOption] = useState("");
@@ -30,7 +30,7 @@ const Search = () => {
   async function handleSearch() {
     setLoading(true);
     try {
-      const results = await axios.get("http://192.168.1.74:8080/");
+      const results = await axios.get("http://localhost:8080/");
       setFlights(results.data);
     } catch (e) {
       console.log(e);
@@ -54,7 +54,7 @@ const Search = () => {
 
     setFlights(sortedFlights);
   };
-  const countriesFitlered=countries.filter(c=> c!=departure);
+  const countriesFitlered = countries.filter((c) => c != departure);
   return (
     <div className="search-body">
       <center>
@@ -185,9 +185,16 @@ const Search = () => {
                     <strong>Price:</strong> ${flight.Price}
                   </span>
                   <span className="column action">
-                    <motion.button whileTap={{ scale: 0.9 }}>
-                      Add to Cart
-                    </motion.button>
+                    {userID  ? (
+                      <motion.button
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => data1(flight.FlightID)}
+                      >
+                        Add to Cart
+                      </motion.button>
+                    ) : (
+                      <div></div>
+                    )}
                   </span>
                 </Reorder.Item>
               ))}

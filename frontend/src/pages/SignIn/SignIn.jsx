@@ -1,25 +1,46 @@
-import React, { useState } from 'react';
-import './SignIn.css';
+import React, { useEffect, useState } from "react";
+import "./SignIn.css";
+import { Link,useNavigate  } from "react-router-dom";
+import axios from "axios";
 
-const SignIn = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [loginError, setLoginError] = useState(''); 
-  const [token,setToken]=useState('');
-  const[role,setRole]=useState('');  
-  const handleLogin = (e) => {
+const SignIn = ({handleID}) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [token, setToken] = useState("");
+  const [role, setRole] = useState("");
+  const navigate=useNavigate();
+  useEffect(() => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("role", role);
+    console.log(token,role);
+  }, [token, role]);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (username === '' || password === '') {
-      setLoginError('Please enter both username and password.');
-    } else {
-      setLoginError(''); 
-      console.log('Username:', username);
-      console.log('Password:', password);
+    try {
+      const result = await axios.post("http://localhost:8080/user/login", {
+        username,
+        password,
+      });
+      if (result.status === 200) {
+        setToken(result.data.token);
+        setRole(result.data.role);
+        handleID();
+        navigate("/"); 
+        
+      } else {
+        setLoginError("Wrong email or password");
+      }
+    } catch (error) {
+      console.log(error);
+      setLoginError("Login failed. Please try again.");
     }
   };
 
+
   return (
-    <div className='background-signin'>
+    <div className="background-signin">
       <div className="signin-container">
         <form onSubmit={handleLogin}>
           <div className="form-group">
@@ -31,7 +52,7 @@ const SignIn = () => {
                 name="username"
                 placeholder="USERNAME"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)} // Update state
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </label>
@@ -46,7 +67,7 @@ const SignIn = () => {
                 name="password"
                 placeholder="PASSWORD"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)} // Update state
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </label>
@@ -60,9 +81,9 @@ const SignIn = () => {
             LOGIN
           </button>
 
-          <button type="button" className="signup-btn">
+         <Link to="/register"> <button type="button" className="signup-btn" >
             SIGN UP
-          </button>
+          </button></Link>
         </form>
 
         {loginError && <div className="login-error">{loginError}</div>}

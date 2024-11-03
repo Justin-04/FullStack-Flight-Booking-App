@@ -1,28 +1,26 @@
-const express = require('express');
-const mysql = require('mysql');
-const connection = require('./database/Mysql');
-const cors=require('cors');
+const express = require("express");
+const mysql = require("mysql");
+const connection = require("./database/Mysql");
+const user=require('./routes/user');
+const cors = require("cors");
 const app = express();
 app.use(cors());
-connection.connect(function (err) {
-  if (err) {
-    console.error('Error connecting to MySQL database:', err);
-    return;
-  }
-  console.log('Connected to the MySQL database.');
-});
+const auth = require("./auth/authentication");
 
-app.get('/', (req, res) => {
+app.use(express.json());
 
-    let sql="Select * from flights";
-    connection.query(sql,(err,results)=>{
-        if(err){
-        console.log(err);
-        }
-        else{
-            res.send(results);
-        }
-    })
+app.use("/user",user);
+app.use("/auth", auth);
+
+app.get("/", (req, res) => {
+  let sql = "Select * from flights";
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(results);
+    }
+  });
 });
 
 const PORT = 8080;

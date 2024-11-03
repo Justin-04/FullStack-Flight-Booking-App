@@ -12,44 +12,43 @@ import Register from "../Register/Register";
 import Footer from "../../components/Footer/Footer";
 import Video1 from "../../components/Video/Video";
 import Cart from "../Cart/Cart";
-const Main = ({id}) => {
+const Main = ({id,data,handleLogOut}) => {
   const [user, setUser] = useState(id);
+  const log=localStorage.getItem("log");
 
   return (
-    // <>
-    //   {id == null ? (
-    //     <>
-    //       <div className="main-body">
-    //         <Nav />
-    //         <Welcome />
-    //       </div>
-    //       <section id="search">
-    //         <Search />
-    //       </section>
-    //       <Video1 />
-    //       <Footer />
-    //     </>
-    //   ) : (
-    //     <>
-    //       <div className="main-body">
-    //         <Nav />
-    //         <Welcome />
-    //       </div>
-    //       <section id="search">
-    //         <Search />
-    //       </section>
-    //       <Video1 />
-    //       <section id="flights">
-    //         <MyFlights />
-    //       </section>
-    //       <Footer />
-    //     </>
-    //   )}
-    // </>
-
     <>
-    <Cart />
+      {log ? (
+        <>
+         <div className="main-body">
+            <Nav handleLogOut={handleLogOut} log={log} />
+            <Welcome />
+          </div>
+          <section id="search">
+            <Search data1={data} userID={log}/>
+          </section>
+          <Video1 />
+          <section id="flights">
+            <MyFlights />
+          </section>
+          <Footer />
+        </>
+      ) : (
+        <>  
+        <div className="main-body">
+            <Nav handleLogOut={handleLogOut} log={log} />
+            <Welcome />
+          </div>
+          <section id="search">
+            <Search userID={log}/>
+          </section>
+          <Video1 />
+          <Footer />
+          
+        </>
+      )}
     </>
+
   );
 };
 

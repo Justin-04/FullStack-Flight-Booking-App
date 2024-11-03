@@ -4,8 +4,9 @@ import MyFlights from "../../components/myFlights/MyFlights";
 import Flightmap from "../../components/FlightMap/Flightmap";
 import Card from "../../components/Card/Card";
 import Checkout from "../../components/Checkout/Checkout";
+import { Link } from "react-router-dom";
 
-const Cart = () => {
+const Cart = ({fidParent}) => {
   const [page, setPage] = useState("");
   const [element, setElement] = useState("");
   const [seat, setSeat] = useState("");
@@ -16,7 +17,12 @@ const Cart = () => {
   const [fid, setFid] = useState("");
   const [checkout, setCheckout] = useState([]);
   const [price, setPrice] = useState("");
-  const [completedSteps, setCompletedSteps] = useState([]); // Track completed steps
+  const [completedSteps, setCompletedSteps] = useState([]);
+  const [meal,setMeal]=useState("");
+
+
+
+
 
   const handleCard = (cardNumber, expiryDate, cardOwner, ccv) => {
     setCardNumber1(cardNumber);
@@ -24,14 +30,15 @@ const Cart = () => {
     setCardOwner1(cardOwner);
     setCV1(ccv);
     setPage("Checkout");
-    setCompletedSteps([...completedSteps, "Payment"]); // Mark Payment as done
+    setCompletedSteps([...completedSteps, "Payment"]); 
   };
 
-  const handleSeat = (seat_, price_) => {
+  const handleSeat = (seat_, price_,meal_) => {
     setSeat(seat_);
     setPrice(price_);
     setPage("Payment");
-    setCompletedSteps([...completedSteps, "Map"]); // Mark Map as done
+    setMeal(meal_);
+    setCompletedSteps([...completedSteps, "Map"]); 
   };
 
   function hide() {
@@ -40,22 +47,23 @@ const Cart = () => {
 
   const checkoutEntry = {
     cardNumber: "Ends with " + "*" + hide() + "*",
-    expiryDate: expiryDate1,
-    cardOwner: cardOwner1,
+    expiryDate: localStorage.getItem("expiryDate" || 'none'),
+    cardOwner: localStorage.getItem("cardOwner" || 'none'),
     ccv: "***",
-    flightID: fid,
-    seat: seat,
-    price: price,
+    flightID: localStorage.getItem("fid" || 'none'),
+    seat: localStorage.getItem("clickedSeat"||'none'),
+    price: localStorage.getItem("price" || 'none'),
+    meal: localStorage.getItem("meal"||'none')
   };
 
-  const handleMessageChange = () => {
-    console.log(checkoutEntry);
+  const handleFinish = () => {
+    setCompletedSteps([...completedSteps,"Checkout"]);
   };
 
   const handleFlight1 = (id1) => {
     setFid(id1);
     setPage("Map");
-    setCompletedSteps([...completedSteps, "Flights"]); // Mark Flights as done
+    setCompletedSteps([...completedSteps, "Flights"]); 
   };
 
   useEffect(() => {
@@ -63,14 +71,13 @@ const Cart = () => {
   }, []);
 
   useEffect(() => {
-    // Update the element based on the current `page`
     if (page === "Map") {
       setElement(<Flightmap seat_={handleSeat} />);
     } else if (page === "Payment") {
       setElement(<Card handle={handleCard} />);
     } else if (page === "Checkout") {
       setElement(
-        <Checkout message={handleMessageChange} checkoutEntry={checkoutEntry} />
+        <Checkout message={handleFinish} checkoutEntry={checkoutEntry} />
       );
     } else {
       setElement(<MyFlights onFlightSelect={handleFlight1} />);
@@ -78,14 +85,26 @@ const Cart = () => {
   }, [page]);
 
   function handleClick_(result) {
-    setPage(result); // Trigger page change
+    setPage(result); 
   }
 
-  // Utility function to check if a step is completed
   const isCompleted = (step) => completedSteps.includes(step);
 
   return (
     <div className="main-cart">
+   
+    <button onClick={()=>  console.log("fidParent",fidParent)  }>press me</button>
+      <Link to="/"  
+      style={{textDecoration:"none",border:"1px solid black",borderRadius:"15px",padding:"4px",backgroundColor:"blue",
+        color:"white"
+
+
+
+      }}
+      
+      
+      
+      >Go Back to Home Page</Link>
       <ul>
         <li
           onClick={() => handleClick_("Flights")}

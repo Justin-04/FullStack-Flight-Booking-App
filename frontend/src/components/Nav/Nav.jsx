@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import {motion} from 'framer-motion';
 import './Nav.css';
 import {scrollToSection} from '../../utilities/scroll.js'
-const Nav = () => {
+import { Link } from 'react-router-dom';
+const Nav = ({handleLogOut,log}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -21,8 +22,9 @@ const Nav = () => {
         <li><a >Home</a></li>
         <li><a onClick={()=>scrollToSection("flights")}>Flights</a></li>
         <li><a href="/profile">Profile</a></li>
-        <li><a href="/cart">Cart</a></li>
-        <li><a>Sign In</a></li>
+      {log ? <li><Link to="/cart">Cart</Link></li> : ""}  
+      {!log ? <li><Link to="/signin">Sign in</Link></li> : "" } 
+    {log? <li onClick={handleLogOut}><a>Sign Out</a></li> : "" }   
       </ul>
       <div className="burger" onClick={toggleMenu}>
         <div className="line1"></div>

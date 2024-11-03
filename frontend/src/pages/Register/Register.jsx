@@ -1,26 +1,44 @@
 import React, { useState } from 'react';
 import './Register.css';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [registerError, setRegisterError] = useState(''); 
+  const [registerError, setRegisterError] = useState('');
+  const navigate = useNavigate();
 
-  // Handle form submission
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    // Basic validation
+
     if (password !== confirmPassword) {
-      setRegisterError('Passwords do not match.');
-    } else if (username === '' || email === '' || password === '') {
-      setRegisterError('All fields are required.');
-    } else {
-      setRegisterError(''); // Clear error on successful validation
-      console.log('Username:', username);
-      console.log('Email:', email);
-      console.log('Password:', password);
+      setRegisterError("Passwords do not match");
+      return;
+    }
+
+    try {
+      const result = await axios.post('http://localhost:8080/user/register', {
+        username,
+        password,
+        email
+      });
+
+      if (result.status === 201) {
+        setRegisterError('');
+        navigate("/signin");
+      } else {
+        setRegisterError("Error registering user");
+      }
+    } catch (error) {
+      if (error.response) {
+        setRegisterError(error.response.data.message || "Error registering user");
+      } else {
+        setRegisterError("Error registering user");
+      }
+      console.log(error);
     }
   };
 

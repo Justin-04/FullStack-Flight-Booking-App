@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./MyFlight.css";
 import ny from '../../images/newyork.png';
 import paris from '../../images/paris.png';
@@ -7,11 +7,18 @@ import { motion } from 'framer-motion';
 
 const MyFlights = ({ onFlightSelect }) => {  
   const [empty, setEmpty] = useState(false);
-  const [flight_ID, setFlight_ID] = useState('');
+  const [flight_ID, setFlight_ID] = useState(()=>localStorage.getItem('fid'||'none'));
+
 
   const handleFlight = (flightId) => {
     onFlightSelect(flightId); 
+    setFlight_ID(flightId);
   };
+
+  useEffect(()=>{
+    localStorage.setItem('fid',flight_ID);
+
+  },[flight_ID]);
 
   const bookedFlights = [
     {

@@ -1,26 +1,58 @@
-import logo from './logo.svg';
-import './App.css';
-import { createContext } from 'react';
-import SignIn from './pages/SignIn/SignIn';
-import Register from './pages/Register/Register';
-import Main from './pages/Main/Main';
-import ScrollToTop from './utilities/ScrollTop';
+import logo from "./logo.svg";
+import "./App.css";
+import { useEffect, useState, createContext } from "react";
+import SignIn from "./pages/SignIn/SignIn";
+import Register from "./pages/Register/Register";
+import Main from "./pages/Main/Main";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Cart from "./pages/Cart/Cart";
 
-  const MyContext = createContext();
+const MyContext = createContext();
+
 function App() {
+  const [loggedin, setLogin] = useState(false);
+  const [data, setData] = useState("");
 
-const user_ID="1234";
+  
 
+  const handleCart = (data_) => {
+    localStorage.setItem("flight_Selected", data_);
+    setData(data_);
+    console.log(data_);
+  };
+
+  const handleID = () => {
+    setLogin(true);
+    localStorage.setItem("log", true);
+    
+  };
+
+  const handleLogOut =()=>{
+setLogin(false);
+console.log(loggedin);
+localStorage.clear();
+  }
   return (
-   <>
+    <Router>
+      { loggedin ? ( 
+       <MyContext.Provider value={loggedin}>
+          <Routes>
+            <Route path="/" element={<Main id={loggedin} data={handleCart} handleLogOut={handleLogOut}/>} /> 
+            <Route path="/cart" element={<Cart fidParent={data} />} />
+          </Routes>
+        </MyContext.Provider>
 
-   <MyContext.Provider value={user_ID}>
-   <Main id={1}  />
-</MyContext.Provider>
-   {/* <SignIn /> 
-   <Register/> */}
-   
-   </>
+      ) : (
+
+      <>
+      <Routes>
+        <Route path="/" element={<Main  handleLogOut={handleLogOut} />} /> 
+        <Route path="/signin" element={<SignIn handleID={handleID} />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+      </>
+      )}
+    </Router>
   );
 }
 
