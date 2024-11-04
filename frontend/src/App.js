@@ -11,15 +11,20 @@ const MyContext = createContext();
 
 function App() {
   const [loggedin, setLogin] = useState(false);
-  const [data, setData] = useState("");
+const[cart,setCart]=useState([]);
+  
+const handleCart = (item) =>{
+  const found = cart.find(product => product === item);
+  if (found) {
+    console.log("item alredy exits");
+  } else {
+    setCart([...cart, item]);
+    console.log(cart);
+  }
+
+}
 
   
-
-  const handleCart = (data_) => {
-    localStorage.setItem("flight_Selected", data_);
-    setData(data_);
-    console.log(data_);
-  };
 
   const handleID = () => {
     setLogin(true);
@@ -37,8 +42,8 @@ localStorage.clear();
       { loggedin ? ( 
        <MyContext.Provider value={loggedin}>
           <Routes>
-            <Route path="/" element={<Main id={loggedin} data={handleCart} handleLogOut={handleLogOut}/>} /> 
-            <Route path="/cart" element={<Cart fidParent={data} />} />
+            <Route path="/" element={<Main id={loggedin} handleLogOut={handleLogOut} handleCart={handleCart} cart={cart} />} /> 
+            <Route path="/cart" element={<Cart cart={cart} />} />
           </Routes>
         </MyContext.Provider>
 
@@ -46,7 +51,7 @@ localStorage.clear();
 
       <>
       <Routes>
-        <Route path="/" element={<Main  handleLogOut={handleLogOut} />} /> 
+        <Route path="/" element={<Main  handleLogOut={handleLogOut} handleCart={handleCart} cart={cart}/>} /> 
         <Route path="/signin" element={<SignIn handleID={handleID} />} />
         <Route path="/register" element={<Register />} />
       </Routes>

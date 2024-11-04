@@ -2,6 +2,7 @@
   background-color: whitesmoke;
   height: 100vh;
   margin-bottom: 20px;
+  overflow: hidden;
 }
 
 .search-body h1 {
@@ -69,10 +70,10 @@
 .column {
   display: flex;
   align-items: center;
-  flex: 1; /* Each column will take equal space */
-  justify-content: center; /* Center the content horizontally */
+  flex: 1;
+  justify-content: center; 
   text-align: center;
-  padding: 0 10px; /* Optional: Add padding between columns */
+  padding: 0 10px; 
 }
 
 .price {
@@ -82,7 +83,7 @@
 .action {
   display: flex;
   justify-content: flex-end;
-  flex: 1; /* Ensure the button gets equal space */
+  flex: 1; 
 }
 
 .result-row button {

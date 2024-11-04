@@ -6,7 +6,7 @@ import Card from "../../components/Card/Card";
 import Checkout from "../../components/Checkout/Checkout";
 import { Link } from "react-router-dom";
 
-const Cart = ({fidParent}) => {
+const Cart = ({cart}) => {
   const [page, setPage] = useState("");
   const [element, setElement] = useState("");
   const [seat, setSeat] = useState("");
@@ -66,9 +66,9 @@ const Cart = ({fidParent}) => {
     setCompletedSteps([...completedSteps, "Flights"]); 
   };
 
-  useEffect(() => {
-    setElement(<MyFlights onFlightSelect={handleFlight1} />);
-  }, []);
+  // useEffect(() => {
+  //   setElement(<MyFlights onFlightSelect={handleFlight1} />);
+  // }, []);
 
   useEffect(() => {
     if (page === "Map") {
@@ -80,7 +80,7 @@ const Cart = ({fidParent}) => {
         <Checkout message={handleFinish} checkoutEntry={checkoutEntry} />
       );
     } else {
-      setElement(<MyFlights onFlightSelect={handleFlight1} />);
+      setElement(<MyFlights cart={cart} onFlightSelect={handleFlight1}/>);
     }
   }, [page]);
 
@@ -93,7 +93,7 @@ const Cart = ({fidParent}) => {
   return (
     <div className="main-cart">
    
-    <button onClick={()=>  console.log("fidParent",fidParent)  }>press me</button>
+    <button>press me</button>
       <Link to="/"  
       style={{textDecoration:"none",border:"1px solid black",borderRadius:"15px",padding:"4px",backgroundColor:"blue",
         color:"white"

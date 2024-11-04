@@ -1,6 +1,6 @@
 import React from "react";
 import "./Main.css";
-import { useState } from "react";
+import { useState,useEffect} from "react";
 import Nav from "../../components/Nav/Nav";
 import Welcome from "../../components/Welcome/Welcome";
 import Search from "../../components/Search/Search";
@@ -12,10 +12,11 @@ import Register from "../Register/Register";
 import Footer from "../../components/Footer/Footer";
 import Video1 from "../../components/Video/Video";
 import Cart from "../Cart/Cart";
-const Main = ({id,data,handleLogOut}) => {
+const Main = ({id,handleLogOut,handleCart, cart}) => {
   const [user, setUser] = useState(id);
   const log=localStorage.getItem("log");
 
+ 
   return (
     <>
       {log ? (
@@ -25,12 +26,9 @@ const Main = ({id,data,handleLogOut}) => {
             <Welcome />
           </div>
           <section id="search">
-            <Search data1={data} userID={log}/>
+            <Search userID={log} handleCart={handleCart}/>
           </section>
           <Video1 />
-          <section id="flights">
-            <MyFlights />
-          </section>
           <Footer />
         </>
       ) : (

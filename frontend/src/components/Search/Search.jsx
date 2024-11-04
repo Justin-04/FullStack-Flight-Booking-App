@@ -3,7 +3,7 @@ import { Reorder, motion } from "framer-motion";
 import "./Search.css";
 import axios from "axios";
 
-const Search = ({ data1,userID }) => {
+const Search = ({ userID ,handleCart}) => {
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sortOption, setSortOption] = useState("");
@@ -11,6 +11,8 @@ const Search = ({ data1,userID }) => {
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
   const [date, setDate] = useState("");
+
+  const[cart,setCart]=useState([]);
 
   const countries = [
     "New York",
@@ -30,7 +32,13 @@ const Search = ({ data1,userID }) => {
   async function handleSearch() {
     setLoading(true);
     try {
-      const results = await axios.get("http://localhost:8080/");
+      const results = await axios.post("http://localhost:8080/flight", 
+        {
+          departure,
+          arrival,
+          date
+        },
+      );
       setFlights(results.data);
     } catch (e) {
       console.log(e);
@@ -55,6 +63,9 @@ const Search = ({ data1,userID }) => {
     setFlights(sortedFlights);
   };
   const countriesFitlered = countries.filter((c) => c != departure);
+
+
+
   return (
     <div className="search-body">
       <center>
@@ -188,7 +199,7 @@ const Search = ({ data1,userID }) => {
                     {userID  ? (
                       <motion.button
                         whileTap={{ scale: 0.9 }}
-                        onClick={() => data1(flight.FlightID)}
+                        onClick={() => handleCart(flight.FlightID)}
                       >
                         Add to Cart
                       </motion.button>

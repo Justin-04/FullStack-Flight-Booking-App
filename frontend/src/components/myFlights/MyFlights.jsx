@@ -1,51 +1,57 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./MyFlight.css";
-import ny from '../../images/newyork.png';
-import paris from '../../images/paris.png';
-import berlin from '../../images/berlin.png';
 import { motion } from 'framer-motion';
+import axios from "axios";
 
-const MyFlights = ({ onFlightSelect }) => {  
+// Global list to store fetched results and maintain state across renders
+let results = JSON.parse(localStorage.getItem('results')) || [];
+
+const MyFlights = ({ onFlightSelect, cart }) => {
+  const [flights, setFlights] = useState(results); // Start with globally stored results
   const [empty, setEmpty] = useState(false);
-  const [flight_ID, setFlight_ID] = useState(()=>localStorage.getItem('fid'||'none'));
-
+  const [flight_ID, setFlight_ID] = useState(() => localStorage.getItem('fid') || 'none');
 
   const handleFlight = (flightId) => {
-    onFlightSelect(flightId); 
+    onFlightSelect(flightId);
     setFlight_ID(flightId);
   };
 
-  useEffect(()=>{
-    localStorage.setItem('fid',flight_ID);
-
-  },[flight_ID]);
-
-  const bookedFlights = [
-    {
-      flightId: 1,
-      departure: "New York",
-      arrival: "London",
-      date: "2024-11-10",
-      duration: "7 hrs",
-      imageUrl: ny
-    },
-    {
-      flightId: 2,
-      departure: "Los Angeles",
-      arrival: "Paris",
-      date: "2024-11-12",
-      duration: "10 hrs",
-      imageUrl: paris
-    },
-    {
-      flightId: 3,
-      departure: "Tokyo",
-      arrival: "Berlin",
-      date: "2024-11-15",
-      duration: "12 hrs",
-      imageUrl: berlin
+  const fetchAndAddFlight = async (flightID) => {
+    try {
+      const result = await axios.post("http://localhost:8080/flight/flightId", { flightID });
+      
+      // Check if the flight already exists in results to prevent duplicates
+      if (!results.some(flight => flight.FlightID === result.data[0].FlightID)) {
+        results = [...results, result.data[0]]; // Update the global results array
+        setFlights(results); // Update component state
+        localStorage.setItem('results', JSON.stringify(results)); // Persist globally updated results
+      }
+    } catch (error) {
+      console.log(error);
     }
-  ];
+  };
+
+  // Whenever `cart` changes, retrieve the last item and fetch its details if unique
+  useEffect(() => {
+    if (cart.length === 0) {
+      setEmpty(true);
+      return;
+    }
+
+    setEmpty(false);
+    const lastItem = cart[cart.length - 1];
+    const lastFetchedFlight = results.find(flight => flight.FlightID === lastItem);
+
+    if (!lastFetchedFlight) {
+      // Only fetch if the last item in cart hasn't been fetched
+      fetchAndAddFlight(lastItem);
+    }
+  }, [cart]);
+
+  // Persist selected flight ID
+  useEffect(() => {
+    localStorage.setItem('fid', flight_ID);
+  }, [flight_ID]);
 
   return (
     <>
@@ -57,22 +63,22 @@ const MyFlights = ({ onFlightSelect }) => {
           </center>
         ) : (
           <div className="myflights-grid">
-            {bookedFlights.map((flight) => (
+            {flights.map((flight) => (
               <motion.div
                 initial={{ y: 30 }}
                 whileInView={{ y: 0 }}
-                key={flight.flightId}
+                key={flight.FlightID}
                 className="flight-card"
               >
-                <img src={flight.imageUrl} alt={`Flight to ${flight.arrival}`} className="flight-image" />
                 <div className="flight-info">
-                  <center><h2>Flight to {flight.arrival}</h2></center>
+                  <center><h2>Flight to {flight.To}</h2></center>
                   <div>
-                    <p><strong>From:</strong> {flight.departure}</p>
-                    <p><strong>To:</strong> {flight.arrival}</p>
-                    <p><strong>Date:</strong> {flight.date}</p>
-                    <p><strong>Duration:</strong> {flight.duration}</p>
-                    <button onClick={() => handleFlight(flight.flightId)}>Click</button>
+                    <p><strong>From:</strong> {flight.From}</p>
+                    <p><strong>To:</strong> {flight.To}</p>
+                    <p><strong>Date:</strong> {flight.Date}</p>
+                    <p><strong>Duration:</strong> {flight.Duration} hrs</p>
+                    <p><strong>Price:</strong> ${flight.Price}</p>
+                    <button onClick={() => handleFlight(flight.FlightID)}>Select Flight</button>
                   </div>
                 </div>
               </motion.div>

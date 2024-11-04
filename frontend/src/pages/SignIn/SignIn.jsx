@@ -7,25 +7,26 @@ const SignIn = ({handleID}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
-  const [token, setToken] = useState("");
-  const [role, setRole] = useState("");
+  const [token, setToken] = useState(()=>localStorage.getItem("token") || '');
+  const [role, setRole] = useState(()=>localStorage.getItem("role") || '');
   const navigate=useNavigate();
+
   useEffect(() => {
     localStorage.setItem("token", token);
     localStorage.setItem("role", role);
-    console.log(token,role);
+  
   }, [token, role]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const result = await axios.post("http://localhost:8080/user/login", {
+      const result = await axios.post("http://192.168.1.76:8080/user/login", {
         username,
         password,
       });
       if (result.status === 200) {
-        setToken(result.data.token);
-        setRole(result.data.role);
+        localStorage.setItem("token", result.data.token);
+        localStorage.setItem("role", result.data.role);
         handleID();
         navigate("/"); 
         
