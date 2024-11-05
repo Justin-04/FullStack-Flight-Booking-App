@@ -4,6 +4,7 @@ import "./Search.css";
 import axios from "axios";
 
 const Search = ({ userID ,handleCart}) => {
+  
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sortOption, setSortOption] = useState("");

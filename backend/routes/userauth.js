@@ -49,7 +49,7 @@ router.post("/login", (req, res) => {
     const { username, password } = req.body;
     try {
       connection.query(
-        "SELECT username, password, role FROM user WHERE username = ?",
+        "SELECT userID,username, password, role FROM user WHERE username = ?",
         [username],
         async (error, results) => {
           if (error) {
@@ -70,10 +70,11 @@ router.post("/login", (req, res) => {
           }
   
           const token = jwt.sign(
-            { username: user.username, role: user.role },
+            { userID:user.userID ,username: user.username, role: user.role },
             process.env.SECRET_KEY,
             { expiresIn: "1h" }
           );
+          console.log(token);
           return res.status(200).send({ token: token, role: user.role });
         }
       );

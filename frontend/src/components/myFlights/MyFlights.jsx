@@ -3,56 +3,53 @@ import "./MyFlight.css";
 import { motion } from 'framer-motion';
 import axios from "axios";
 
-// Global list to store fetched results and maintain state across renders
-let results = JSON.parse(localStorage.getItem('results')) || [];
 
 const MyFlights = ({ onFlightSelect, cart }) => {
-  const [flights, setFlights] = useState(results); // Start with globally stored results
+  const [flights, setFlights] = useState([]); 
   const [empty, setEmpty] = useState(false);
-  const [flight_ID, setFlight_ID] = useState(() => localStorage.getItem('fid') || 'none');
+  const [flight_ID, setFlight_ID] = useState("");
 
   const handleFlight = (flightId) => {
     onFlightSelect(flightId);
     setFlight_ID(flightId);
   };
 
-  const fetchAndAddFlight = async (flightID) => {
+useEffect(() => {
+  try {
+    const result = axios.post(
+      "http://localhost:8080/cart",
+      { flight_ID: cart[cart.length - 1] },
+      {
+        headers: {
+          authorization: `${localStorage.getItem("token")}`,
+        },
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+}, [cart]);
+
+useEffect(() => {
+  fetchAllData();
+}, []);
+
+
+
+  const fetchAllData = async () => {
     try {
-      const result = await axios.post("http://localhost:8080/flight/flightId", { flightID });
-      
-      // Check if the flight already exists in results to prevent duplicates
-      if (!results.some(flight => flight.FlightID === result.data[0].FlightID)) {
-        results = [...results, result.data[0]]; // Update the global results array
-        setFlights(results); // Update component state
-        localStorage.setItem('results', JSON.stringify(results)); // Persist globally updated results
+      const result = await axios.get("http://localhost:8080/cart/getAll");
+      if(result.data.length!==0){
+      setFlights(result.data);
+      setEmpty(false);
+      }
+      else{
+        setEmpty(true);
       }
     } catch (error) {
       console.log(error);
     }
   };
-
-  // Whenever `cart` changes, retrieve the last item and fetch its details if unique
-  useEffect(() => {
-    if (cart.length === 0) {
-      setEmpty(true);
-      return;
-    }
-
-    setEmpty(false);
-    const lastItem = cart[cart.length - 1];
-    const lastFetchedFlight = results.find(flight => flight.FlightID === lastItem);
-
-    if (!lastFetchedFlight) {
-      // Only fetch if the last item in cart hasn't been fetched
-      fetchAndAddFlight(lastItem);
-    }
-  }, [cart]);
-
-  // Persist selected flight ID
-  useEffect(() => {
-    localStorage.setItem('fid', flight_ID);
-  }, [flight_ID]);
-
   return (
     <>
       <div className="flights" style={empty ? { display: 'flex', alignItems: 'center', justifyContent: 'center' } : {}}>

@@ -20,7 +20,7 @@ const Nav = ({handleLogOut,log}) => {
       <div className="nav-logo">Flight Booking</div>
       <ul className={isOpen ? "nav-links nav-active" : "nav-links"}>
         <li><a >Home</a></li>
-        <li><a onClick={()=>scrollToSection("flights")}>Flights</a></li>
+        <li><a onClick={()=>scrollToSection("search")}>Search</a></li>
         <li><a href="/profile">Profile</a></li>
       {log ? <li><Link to="/cart">Cart</Link></li> : ""}  
       {!log ? <li><Link to="/signin">Sign in</Link></li> : "" } 

@@ -3,7 +3,7 @@ const connection=require('../database/Mysql');
 
 const router = express.Router();
 
-route.post("/seat",(req,res)=>{
+router.post("/seat",(req,res)=>{
 const {flightID} = req.body;
 
 let sql="SELECT SeatId,SeatNumber,Class,Status,price FROM flights f inner join seats s on f.FlightID=s.FlightId where s.`FlightID`=?";
@@ -29,4 +29,4 @@ connection.query(sql,[flightID],
 
 
 
-module.exports=route;
+module.exports=router;
