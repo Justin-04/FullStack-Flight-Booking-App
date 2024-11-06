@@ -1,51 +1,44 @@
 import { useState, useEffect } from "react";
 import "./Flightmap.css";
 import x from "../../images/x-symbol.svg";
-
+import axios from "axios";
+import { seatcall } from "../../apicalls/seatAPICALL";
 const Flightmap = ({ seat_ }) => {
   const [data, setData] = useState([]);
-  const [clickedSeat, setClickedSeat] = useState(() => localStorage.getItem('clickedSeat') || 'none');
-  const [price, setPrice] = useState(() => parseFloat(localStorage.getItem('price')) || 0);
-  const [selectedMeal, setSelectedMeal] = useState(localStorage.getItem('meal') || 'none');
+  const [clickedSeat, setClickedSeat] = useState(
+    () => localStorage.getItem("clickedSeat") || "none"
+  );
+  const [price, setPrice] = useState(
+    () => parseFloat(localStorage.getItem("price")) || 0
+  );
+  const [selectedMeal, setSelectedMeal] = useState(
+    localStorage.getItem("meal") || "none"
+  );
 
   const mealOptions = ["Beef", "Chicken", "Vegan"];
 
   useEffect(() => {
-    localStorage.setItem('clickedSeat', clickedSeat);
-    localStorage.setItem('price', price);
-    localStorage.setItem('meal', selectedMeal);
-  }, [clickedSeat, price, selectedMeal]);
+    getSeats();
+  }, []);
+
+  const getSeats = async () => {
+    if (localStorage.getItem("fid") !== null) {
+      try {
+        const result = await axios.post("http://localhost:8080/seat", {
+          flightID: `${localStorage.getItem("fid")}`,
+        });
+        console.log("OMWL", result.data);
+        setData(result.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   useEffect(() => {
-    const mockData = [
-      { id: 1, class: "Premium", status: "Available", price: 200 },
-      { id: 2, class: "Premium", status: "Booked", price: 200 },
-      { id: 3, class: "Premium", status: "Available", price: 200 },
-      { id: 4, class: "Premium", status: "Booked", price: 200 },
-      { id: 5, class: "Premium", status: "Available", price: 200 },
-      { id: 6, class: "Premium", status: "Booked", price: 200 },
-      { id: 7, class: "Premium", status: "Available", price: 200 },
-      { id: 8, class: "Premium", status: "Booked", price: 200 },
-      { id: 9, class: "Premium", status: "Available", price: 200 },
-      { id: 10, class: "Premium", status: "Booked", price: 200 },
-      { id: 11, class: "Premium", status: "Available", price: 200 },
-      { id: 12, class: "Premium", status: "Booked", price: 200 },
-      { id: 13, class: "Economy", status: "Available", price: 100 },
-      { id: 14, class: "Economy", status: "Booked", price: 100 },
-      { id: 15, class: "Economy", status: "Available", price: 100 },
-      { id: 16, class: "Economy", status: "Booked", price: 100 },
-      { id: 17, class: "Economy", status: "Available", price: 100 },
-      { id: 18, class: "Economy", status: "Booked", price: 100 },
-      { id: 19, class: "Economy", status: "Available", price: 100 },
-      { id: 20, class: "Economy", status: "Booked", price: 100 },
-      { id: 21, class: "Economy", status: "Available", price: 100 },
-      { id: 22, class: "Economy", status: "Booked", price: 100 },
-      { id: 23, class: "Economy", status: "Available", price: 100 },
-      { id: 24, class: "Economy", status: "Booked", price: 100 },
-    ];
-
-    setData(mockData);
-  }, []);
+    localStorage.setItem("clickedSeat", clickedSeat);
+    localStorage.setItem("meal", selectedMeal);
+  }, [clickedSeat, selectedMeal]);
 
   const handleClick = (seatId, price1) => {
     setClickedSeat(seatId);
@@ -53,8 +46,10 @@ const Flightmap = ({ seat_ }) => {
   };
 
   const handleClick1 = () => {
-    if (clickedSeat === 'none' || price === 0 || selectedMeal === 'none') {
-      alert("Please select a seat, meal, and ensure price is set before proceeding.");
+    if (clickedSeat === "none" || price === 0 || selectedMeal === "none") {
+      alert(
+        "Please select a seat, meal, and ensure price is set before proceeding."
+      );
       return;
     }
     seat_(clickedSeat, price, selectedMeal);
@@ -65,11 +60,11 @@ const Flightmap = ({ seat_ }) => {
   };
 
   const getSeatClass = (seat) => {
-    if (seat.status === "Booked") {
+    if (seat.Status === "Booked") {
       return "seats occupied";
-    } else if (seat.class === "Premium") {
+    } else if (seat.Class === "Premium") {
       return "seats premium available";
-    } else if (seat.class === "Economy") {
+    } else if (seat.Class === "Economy") {
       return "seats economy available";
     }
   };
@@ -80,17 +75,17 @@ const Flightmap = ({ seat_ }) => {
         {data.length > 0 ? (
           data.map((seat) => (
             <div
-              key={seat.id}
-              id={`seat${seat.id}`}
+              key={seat.SeatId}
+              id={`seat${seat.SeatId}`}
               className={getSeatClass(seat)}
-              onClick={() => handleClick(seat.id, seat.price)}
+              onClick={() => handleClick(seat.SeatNumber, parseFloat(seat.price))}
               style={
-                clickedSeat === seat.id
+                clickedSeat === seat.SeatId
                   ? { border: "3px solid black", scale: "1.1" }
                   : {}
               }
             >
-              {seat.status === "Booked" ? (
+              {seat.Status === "Booked" ? (
                 <div>
                   <img
                     style={{
@@ -103,7 +98,7 @@ const Flightmap = ({ seat_ }) => {
                   />
                 </div>
               ) : (
-                `Seat ${seat.id}`
+                `Seat ${seat.SeatNumber}`
               )}
             </div>
           ))
@@ -116,22 +111,37 @@ const Flightmap = ({ seat_ }) => {
           <div>Description: Select your seat</div>
           <div>Seat Selected: {clickedSeat}</div>
           <div>Price: {price} $</div>
-          <select name="meal" id="meal" value={selectedMeal} onChange={handleMealChange}>
+          <select
+            name="meal"
+            id="meal"
+            value={selectedMeal}
+            onChange={handleMealChange}
+          >
             <option value="" disabled>
               -Choose Your meal-
             </option>
             {mealOptions.map((meal) => (
-              <option key={meal} value={meal}>{meal}</option>
+              <option key={meal} value={meal}>
+                {meal}
+              </option>
             ))}
           </select>
-          <div><button onClick={handleClick1}>--Next--</button></div>
+          <div>
+            <button onClick={handleClick1}>--Next--</button>
+          </div>
         </div>
         <table className="flightmap-table">
           <tbody>
             <tr>
-              <td><span className="blue">Blue</span></td>
-              <td><span className="green">Green</span></td>
-              <td><span className="red">Red</span></td>
+              <td>
+                <span className="blue">Blue</span>
+              </td>
+              <td>
+                <span className="green">Green</span>
+              </td>
+              <td>
+                <span className="red">Red</span>
+              </td>
             </tr>
             <tr>
               <td>Premium</td>

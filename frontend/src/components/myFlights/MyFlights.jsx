@@ -4,31 +4,18 @@ import { motion } from 'framer-motion';
 import axios from "axios";
 
 
-const MyFlights = ({ onFlightSelect, cart }) => {
+const MyFlights = ({ onFlightSelect }) => {
   const [flights, setFlights] = useState([]); 
   const [empty, setEmpty] = useState(false);
   const [flight_ID, setFlight_ID] = useState("");
 
-  const handleFlight = (flightId) => {
-    onFlightSelect(flightId);
+  const handleFlight = (flightId,price) => {
+    onFlightSelect(flightId,price);
+    localStorage.setItem("fid",flightId);
+    console.log("LOSLLASLSAL",flightId);
     setFlight_ID(flightId);
   };
 
-useEffect(() => {
-  try {
-    const result = axios.post(
-      "http://localhost:8080/cart",
-      { flight_ID: cart[cart.length - 1] },
-      {
-        headers: {
-          authorization: `${localStorage.getItem("token")}`,
-        },
-      }
-    );
-  } catch (error) {
-    console.log(error);
-  }
-}, [cart]);
 
 useEffect(() => {
   fetchAllData();
@@ -38,7 +25,13 @@ useEffect(() => {
 
   const fetchAllData = async () => {
     try {
-      const result = await axios.get("http://localhost:8080/cart/getAll");
+      const result = await axios.get("http://localhost:8080/cart/getall",
+        {
+          headers:{
+            authorization: `${localStorage.getItem("token")}`,
+          }
+        }
+      );
       if(result.data.length!==0){
       setFlights(result.data);
       setEmpty(false);
@@ -53,7 +46,7 @@ useEffect(() => {
   return (
     <>
       <div className="flights" style={empty ? { display: 'flex', alignItems: 'center', justifyContent: 'center' } : {}}>
-        <center><h1>My Flights</h1></center>
+      {empty ? '' : <center><h1>My Flights</h1></center>}
         {empty ? (
           <center>
             <h1 className="empty-message">You Didn't Book Any Flights</h1>
@@ -75,7 +68,7 @@ useEffect(() => {
                     <p><strong>Date:</strong> {flight.Date}</p>
                     <p><strong>Duration:</strong> {flight.Duration} hrs</p>
                     <p><strong>Price:</strong> ${flight.Price}</p>
-                    <button onClick={() => handleFlight(flight.FlightID)}>Select Flight</button>
+                    <button onClick={() => handleFlight(flight.FLightID,flight.Price)}>Select Flight</button>
                   </div>
                 </div>
               </motion.div>

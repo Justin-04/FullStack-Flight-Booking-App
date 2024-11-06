@@ -3,7 +3,7 @@ import { MyContext } from '../../App';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Checkout.css'
-const Checkout = ({ checkoutEntry,message }) => {
+const Checkout = ({ checkoutEntry,message }) => { //TODO call all apis respectivly 
   const user_ID = useContext(MyContext);
   const navigate=useNavigate();
   const  handleFinish = () =>{
@@ -25,7 +25,6 @@ const Checkout = ({ checkoutEntry,message }) => {
              <div className="receipt-container">
              <div key="checkout-entry" className="checkout-entry">
                <h2>Receipt</h2>
-               <p><strong>User ID:</strong> {user_ID}</p>
                <p><strong>Card Number:</strong> {checkoutEntry.cardNumber}</p>
                <p><strong>Expiry Date:</strong> {checkoutEntry.expiryDate}</p>
                <p><strong>Card Owner:</strong> {checkoutEntry.cardOwner}</p>

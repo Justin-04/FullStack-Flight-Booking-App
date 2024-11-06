@@ -91,3 +91,32 @@
     margin-top: 20px;
   }
   
+  .warning{
+    height: 40px;
+    width: 250px;
+    position: fixed;
+    right: 0;
+    top: 15%;
+    background-color: rgb(210, 91, 91);
+    font-size: 1.1rem;
+    color: white;
+    font-family: cursive;
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 999;
+  }
+
+  .message{
+    height: 40px;
+    width: 250px;
+    position: fixed;
+    right: 0;
+    top: 15%;
+    background-color: rgb(41, 134, 37);
+    font-size: 1.1rem;
+    color: white;
+    font-family: cursive;
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 999;
+  }

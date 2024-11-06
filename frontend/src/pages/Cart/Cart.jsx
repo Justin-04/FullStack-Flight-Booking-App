@@ -6,7 +6,7 @@ import Card from "../../components/Card/Card";
 import Checkout from "../../components/Checkout/Checkout";
 import { Link } from "react-router-dom";
 
-const Cart = ({cart}) => {
+const Cart = ({ cart }) => {
   const [page, setPage] = useState("");
   const [element, setElement] = useState("");
   const [seat, setSeat] = useState("");
@@ -16,13 +16,9 @@ const Cart = ({cart}) => {
   const [ccv1, setCV1] = useState("");
   const [fid, setFid] = useState("");
   const [checkout, setCheckout] = useState([]);
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState();
   const [completedSteps, setCompletedSteps] = useState([]);
-  const [meal,setMeal]=useState("");
-
-
-
-
+  const [meal, setMeal] = useState("");
 
   const handleCard = (cardNumber, expiryDate, cardOwner, ccv) => {
     setCardNumber1(cardNumber);
@@ -30,15 +26,15 @@ const Cart = ({cart}) => {
     setCardOwner1(cardOwner);
     setCV1(ccv);
     setPage("Checkout");
-    setCompletedSteps([...completedSteps, "Payment"]); 
+    setCompletedSteps([...completedSteps, "Payment"]);
   };
 
-  const handleSeat = (seat_, price_,meal_) => {
+  const handleSeat = (seat_, price_, meal_) => {
     setSeat(seat_);
-    setPrice(price_);
+    setPrice(price+parseInt(price_));
     setPage("Payment");
     setMeal(meal_);
-    setCompletedSteps([...completedSteps, "Map"]); 
+    setCompletedSteps([...completedSteps, "Map"]);
   };
 
   function hide() {
@@ -47,23 +43,24 @@ const Cart = ({cart}) => {
 
   const checkoutEntry = {
     cardNumber: "Ends with " + "*" + hide() + "*",
-    expiryDate: localStorage.getItem("expiryDate" || 'none'),
-    cardOwner: localStorage.getItem("cardOwner" || 'none'),
+    expiryDate: localStorage.getItem("expiryDate" || "none"),
+    cardOwner: localStorage.getItem("cardOwner" || "none"),
     ccv: "***",
-    flightID: localStorage.getItem("fid" || 'none'),
-    seat: localStorage.getItem("clickedSeat"||'none'),
-    price: localStorage.getItem("price" || 'none'),
-    meal: localStorage.getItem("meal"||'none')
+    flightID: localStorage.getItem("fid" || "none"),
+    seat: localStorage.getItem("clickedSeat" || "none"),
+    price: price,
+    meal: localStorage.getItem("meal" || "none"),
   };
 
   const handleFinish = () => {
-    setCompletedSteps([...completedSteps,"Checkout"]);
+    setCompletedSteps([...completedSteps, "Checkout"]);
   };
 
-  const handleFlight1 = (id1) => {
+  const handleFlight1 = (id1,price_) => {
     setFid(id1);
+    setPrice(parseInt(price_));
     setPage("Map");
-    setCompletedSteps([...completedSteps, "Flights"]); 
+    setCompletedSteps([...completedSteps, "Flights"]);
   };
 
   // useEffect(() => {
@@ -80,31 +77,31 @@ const Cart = ({cart}) => {
         <Checkout message={handleFinish} checkoutEntry={checkoutEntry} />
       );
     } else {
-      setElement(<MyFlights cart={cart} onFlightSelect={handleFlight1}/>);
+      setElement(<MyFlights cart={cart} onFlightSelect={handleFlight1} />);
     }
   }, [page]);
 
   function handleClick_(result) {
-    setPage(result); 
+    setPage(result);
   }
 
   const isCompleted = (step) => completedSteps.includes(step);
 
   return (
     <div className="main-cart">
-   
-    <button>press me</button>
-      <Link to="/"  
-      style={{textDecoration:"none",border:"1px solid black",borderRadius:"15px",padding:"4px",backgroundColor:"blue",
-        color:"white"
-
-
-
-      }}
-      
-      
-      
-      >Go Back to Home Page</Link>
+      <Link
+        to="/"
+        style={{
+          textDecoration: "none",
+          border: "1px solid black",
+          borderRadius: "15px",
+          padding: "4px",
+          backgroundColor: "blue",
+          color: "white",
+        }}
+      >
+        Go Back to Home Page
+      </Link>
       <ul>
         <li
           onClick={() => handleClick_("Flights")}

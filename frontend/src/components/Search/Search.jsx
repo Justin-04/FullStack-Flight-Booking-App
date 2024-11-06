@@ -3,7 +3,7 @@ import { Reorder, motion } from "framer-motion";
 import "./Search.css";
 import axios from "axios";
 
-const Search = ({ userID ,handleCart}) => {
+const Search = ({ userID }) => { 
   
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -13,7 +13,10 @@ const Search = ({ userID ,handleCart}) => {
   const [arrival, setArrival] = useState("");
   const [date, setDate] = useState("");
 
-  const[cart,setCart]=useState([]);
+  const[warning,setWarning]=useState(false);
+
+  const [cartMessage,setCartMessage]=useState(false);
+  const cartmessage="Flight added successfully!";
 
   const countries = [
     "New York",
@@ -29,6 +32,28 @@ const Search = ({ userID ,handleCart}) => {
     "Beirut",
     "FrankFurt",
   ];
+
+async function handleCart(fid) {
+  try {
+    const result =await axios.post(
+      "http://localhost:8080/cart",
+      { flightID: fid },
+      {
+        headers: {
+          authorization: `${localStorage.getItem("token")}`,
+        },
+      }
+    );
+  setCartMessage(true);
+  setTimeout(() => setCartMessage(false), 2000);
+  } catch (error) {
+    if(error.status==401){
+      setWarning(true);
+      setTimeout(() => setWarning(false), 2000);
+    }
+  }
+}
+
 
   async function handleSearch() {
     setLoading(true);
@@ -69,6 +94,8 @@ const Search = ({ userID ,handleCart}) => {
 
   return (
     <div className="search-body">
+       {warning && <div className='warning'>Flight already added!!</div>}
+       {cartMessage && <div className='message'>{cartmessage}</div>}
       <center>
         <motion.h1
           initial={{ opacity: 0 }}

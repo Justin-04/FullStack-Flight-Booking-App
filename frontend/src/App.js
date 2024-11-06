@@ -6,22 +6,20 @@ import Register from "./pages/Register/Register";
 import Main from "./pages/Main/Main";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Cart from "./pages/Cart/Cart";
+import Profile from "./pages/Profile/Profile";
 
 const MyContext = createContext();
 
 function App() {
   const [loggedin, setLogin] = useState(false);
-  const [cart, setCart] = useState([]);
 
-  const handleCart = (item) => {
-    const found = cart.find((product) => product === item);
-    if (found) {
-      console.log("item alredy exits");
-    } else {
-      setCart([...cart, item]);
-      console.log(cart);
+  useEffect(()=>{
+    if(localStorage.getItem("token")!==null){
+      setLogin(true);
     }
-  };
+  },[]);
+
+  
 
   const handleID = () => {
     setLogin(true);
@@ -44,12 +42,11 @@ function App() {
                 <Main
                   id={loggedin}
                   handleLogOut={handleLogOut}
-                  handleCart={handleCart}
-                  cart={cart}
                 />
               }
             />
-            <Route path="/cart" element={<Cart cart={cart} />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </MyContext.Provider>
       ) : (
@@ -61,8 +58,6 @@ function App() {
                 <Main
                 id={loggedin}
                   handleLogOut={handleLogOut}
-                  handleCart={handleCart}
-                  cart={cart}
                 />
               }
             />

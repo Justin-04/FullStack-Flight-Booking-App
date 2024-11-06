@@ -21,7 +21,7 @@ const Nav = ({handleLogOut,log}) => {
       <ul className={isOpen ? "nav-links nav-active" : "nav-links"}>
         <li><a >Home</a></li>
         <li><a onClick={()=>scrollToSection("search")}>Search</a></li>
-        <li><a href="/profile">Profile</a></li>
+       {log ? <li><a href="/profile">Profile</a></li> :""} 
       {log ? <li><Link to="/cart">Cart</Link></li> : ""}  
       {!log ? <li><Link to="/signin">Sign in</Link></li> : "" } 
     {log? <li onClick={handleLogOut}><a>Sign Out</a></li> : "" }   
