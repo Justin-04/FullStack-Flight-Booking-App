@@ -6,6 +6,7 @@ const cors = require("cors");
 const flights = require("./routes/flights");
 const seat=require("./routes/seat");
 const cart=require("./routes/cart");
+const email=require("./routes/email");
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -14,7 +15,7 @@ app.use("/user",user);
 app.use("/flight",flights);
 app.use("/seat",seat);
 app.use("/cart",cart);
-
+app.use("/email",email);
 
 const PORT = 8080;
 app.listen(PORT, () => {

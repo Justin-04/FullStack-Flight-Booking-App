@@ -2,11 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { MyContext } from '../../App';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { seatcall } from '../../apicalls/seatAPICALL';
+import { emailCall } from '../../apicalls/emailAPICALL';
 import './Checkout.css'
-const Checkout = ({ checkoutEntry,message }) => { //TODO call all apis respectivly 
+const Checkout = ({ checkoutEntry,message }) => { 
   const user_ID = useContext(MyContext);
   const navigate=useNavigate();
+  const [display,setDisplay]=useState(false);
   const  handleFinish = () =>{
+    emailCall();
+    seatcall();
     navigate("/");
     localStorage.removeItem("clickedSeat");
     localStorage.removeItem("price");
@@ -16,11 +21,24 @@ const Checkout = ({ checkoutEntry,message }) => { //TODO call all apis respectiv
     localStorage.removeItem("cardOwner");
     localStorage.removeItem("ccv");
     localStorage.removeItem("ccv");
+    localStorage.removeItem("class");
+    localStorage.removeItem("date");
+    localStorage.removeItem("fid");
     message();
   }
   return (
     <>
       <div>
+      {display ? (
+        <>
+        <div>Would you like to Receive an email?</div>
+        <button onClick={()=>console.log}>YES</button>
+        </>
+      )
+      
+    : ""
+    
+    }
         {
              <div className="receipt-container">
              <div key="checkout-entry" className="checkout-entry">

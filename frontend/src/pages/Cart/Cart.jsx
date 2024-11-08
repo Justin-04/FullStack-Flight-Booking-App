@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 
 const Cart = ({ cart }) => {
   const [page, setPage] = useState("");
+  const [sClass,setClass]=useState("");
   const [element, setElement] = useState("");
   const [seat, setSeat] = useState("");
   const [cardNumber1, setCardNumber1] = useState("");
@@ -29,11 +30,12 @@ const Cart = ({ cart }) => {
     setCompletedSteps([...completedSteps, "Payment"]);
   };
 
-  const handleSeat = (seat_, price_, meal_) => {
+  const handleSeat = (seat_, price_, meal_,class_) => {
     setSeat(seat_);
     setPrice(price+parseInt(price_));
     setPage("Payment");
     setMeal(meal_);
+    setClass(class_);
     setCompletedSteps([...completedSteps, "Map"]);
   };
 
@@ -56,10 +58,11 @@ const Cart = ({ cart }) => {
     setCompletedSteps([...completedSteps, "Checkout"]);
   };
 
-  const handleFlight1 = (id1,price_) => {
+  const handleFlight1 = (id1,price_,date) => {
     setFid(id1);
     setPrice(parseInt(price_));
     setPage("Map");
+    localStorage.setItem("date",date);
     setCompletedSteps([...completedSteps, "Flights"]);
   };
 

@@ -9,8 +9,8 @@ const MyFlights = ({ onFlightSelect }) => {
   const [empty, setEmpty] = useState(false);
   const [flight_ID, setFlight_ID] = useState("");
 
-  const handleFlight = (flightId,price) => {
-    onFlightSelect(flightId,price);
+  const handleFlight = (flightId,price,date) => {
+    onFlightSelect(flightId,price,date);
     localStorage.setItem("fid",flightId);
     console.log("LOSLLASLSAL",flightId);
     setFlight_ID(flightId);
@@ -68,7 +68,7 @@ useEffect(() => {
                     <p><strong>Date:</strong> {flight.Date}</p>
                     <p><strong>Duration:</strong> {flight.Duration} hrs</p>
                     <p><strong>Price:</strong> ${flight.Price}</p>
-                    <button onClick={() => handleFlight(flight.FLightID,flight.Price)}>Select Flight</button>
+                    <button onClick={() => handleFlight(flight.FLightID,flight.Price,flight.Date)}>Select Flight</button>
                   </div>
                 </div>
               </motion.div>

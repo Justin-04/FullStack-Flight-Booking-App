@@ -15,6 +15,10 @@ const Flightmap = ({ seat_ }) => {
     localStorage.getItem("meal") || "none"
   );
 
+  const [sclass,setClass]= useState(
+    localStorage.getItem("class") || "none"
+  );
+
   const mealOptions = ["Beef", "Chicken", "Vegan"];
 
   useEffect(() => {
@@ -38,11 +42,14 @@ const Flightmap = ({ seat_ }) => {
   useEffect(() => {
     localStorage.setItem("clickedSeat", clickedSeat);
     localStorage.setItem("meal", selectedMeal);
-  }, [clickedSeat, selectedMeal]);
+    localStorage.setItem("class",sclass);
+    localStorage.setItem("price",price);
+  }, [clickedSeat, selectedMeal,sclass,price]);
 
-  const handleClick = (seatId, price1) => {
+  const handleClick = (seatId, price1,class_) => {
     setClickedSeat(seatId);
     setPrice(price1);
+    setClass(class_);
   };
 
   const handleClick1 = () => {
@@ -52,7 +59,7 @@ const Flightmap = ({ seat_ }) => {
       );
       return;
     }
-    seat_(clickedSeat, price, selectedMeal);
+    seat_(clickedSeat, price, selectedMeal, sclass);
   };
 
   const handleMealChange = (event) => {
@@ -78,7 +85,7 @@ const Flightmap = ({ seat_ }) => {
               key={seat.SeatId}
               id={`seat${seat.SeatId}`}
               className={getSeatClass(seat)}
-              onClick={() => handleClick(seat.SeatNumber, parseFloat(seat.price))}
+              onClick={() => handleClick(seat.SeatNumber, parseFloat(seat.price), seat.Class)}
               style={
                 clickedSeat === seat.SeatId
                   ? { border: "3px solid black", scale: "1.1" }
