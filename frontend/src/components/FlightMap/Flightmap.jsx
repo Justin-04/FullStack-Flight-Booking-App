@@ -5,6 +5,9 @@ import axios from "axios";
 import { seatcall } from "../../apicalls/seatAPICALL";
 const Flightmap = ({ seat_ }) => {
   const [data, setData] = useState([]);
+  const [seatId, setSeatId] = useState(
+    () => localStorage.getItem("seatId") || "none"
+  );
   const [clickedSeat, setClickedSeat] = useState(
     () => localStorage.getItem("clickedSeat") || "none"
   );
@@ -28,7 +31,7 @@ const Flightmap = ({ seat_ }) => {
   const getSeats = async () => {
     if (localStorage.getItem("fid") !== null) {
       try {
-        const result = await axios.post("http://localhost:8080/seat", {
+        const result = await axios.post("http://192.168.1.73:8080/seat", {
           flightID: `${localStorage.getItem("fid")}`,
         });
         console.log("OMWL", result.data);
@@ -44,12 +47,14 @@ const Flightmap = ({ seat_ }) => {
     localStorage.setItem("meal", selectedMeal);
     localStorage.setItem("class",sclass);
     localStorage.setItem("price",price);
-  }, [clickedSeat, selectedMeal,sclass,price]);
+    localStorage.setItem("seatId",seatId);
+  }, [clickedSeat, selectedMeal,sclass,price,seatId]);
 
-  const handleClick = (seatId, price1,class_) => {
+  const handleClick = (seatId, price1,class_,id_) => {
     setClickedSeat(seatId);
     setPrice(price1);
     setClass(class_);
+    setSeatId(id_);
   };
 
   const handleClick1 = () => {
@@ -85,7 +90,7 @@ const Flightmap = ({ seat_ }) => {
               key={seat.SeatId}
               id={`seat${seat.SeatId}`}
               className={getSeatClass(seat)}
-              onClick={() => handleClick(seat.SeatNumber, parseFloat(seat.price), seat.Class)}
+              onClick={() => handleClick(seat.SeatNumber, parseFloat(seat.price), seat.Class, seat.SeatId)}
               style={
                 clickedSeat === seat.SeatId
                   ? { border: "3px solid black", scale: "1.1" }

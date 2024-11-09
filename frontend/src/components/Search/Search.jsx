@@ -36,7 +36,7 @@ const Search = ({ userID }) => {
 async function handleCart(fid) {
   try {
     const result =await axios.post(
-      "http://localhost:8080/cart",
+      "http://192.168.1.73:8080/cart",
       { flightID: fid },
       {
         headers: {
@@ -58,7 +58,7 @@ async function handleCart(fid) {
   async function handleSearch() {
     setLoading(true);
     try {
-      const results = await axios.post("http://localhost:8080/flight", 
+      const results = await axios.post("http://192.168.1.73:8080/flight", 
         {
           departure,
           arrival,

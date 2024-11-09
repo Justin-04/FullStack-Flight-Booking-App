@@ -24,6 +24,7 @@ const Checkout = ({ checkoutEntry,message }) => {
     localStorage.removeItem("class");
     localStorage.removeItem("date");
     localStorage.removeItem("fid");
+    localStorage.removeItem("seatId");
     message();
   }
   return (

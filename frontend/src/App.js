@@ -7,6 +7,7 @@ import Main from "./pages/Main/Main";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Cart from "./pages/Cart/Cart";
 import Profile from "./pages/Profile/Profile";
+import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
 
 const MyContext = createContext();
 
@@ -14,8 +15,8 @@ function App() {
   const [loggedin, setLogin] = useState(false);
 
   useEffect(()=>{
-    if(localStorage.getItem("token")!==null){
-      setLogin(true);
+    if(localStorage.getItem("token")===null){
+      setLogin(true); //BUG might cause a problem later
     }
   },[]);
 
@@ -63,6 +64,7 @@ function App() {
             />
             <Route path="/signin" element={<SignIn handleID={handleID} />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgotPass" element={<ForgotPassword />} />
           </Routes>
         </>
       )}

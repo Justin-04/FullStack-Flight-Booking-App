@@ -114,18 +114,31 @@ const Cart = ({ cart }) => {
         </li>
         <li
           onClick={() => handleClick_("Map")}
+          style={{
+            opacity: isCompleted("Flights") ? 1 : 0.5,
+            pointerEvents: isCompleted("Flights") ? 'auto' : 'none',
+          }}
           className={isCompleted("Map") ? "completed-step" : ""}
         >
           Flight Map
         </li>
         <li
           onClick={() => handleClick_("Payment")}
+          style={{
+            opacity: isCompleted("Flights") && isCompleted("Map")  ? 1 : 0.5,
+            pointerEvents: isCompleted("Flights") && isCompleted("Map") ? 'auto' : 'none',
+          }}
           className={isCompleted("Payment") ? "completed-step" : ""}
+
         >
           Payment
         </li>
         <li
           onClick={() => handleClick_("Checkout")}
+          style={{
+            opacity: isCompleted("Flights") && isCompleted("Map") && isCompleted("Payment") ? 1 : 0.5,
+            pointerEvents: isCompleted("Flights") && isCompleted("Map") && isCompleted("Payment") ? 'auto' : 'none',
+          }}
           className={isCompleted("Checkout") ? "completed-step" : ""}
         >
           Checkout
