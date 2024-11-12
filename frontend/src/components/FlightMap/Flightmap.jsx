@@ -31,7 +31,7 @@ const Flightmap = ({ seat_ }) => {
   const getSeats = async () => {
     if (localStorage.getItem("fid") !== null) {
       try {
-        const result = await axios.post("http://192.168.1.73:8080/seat", {
+        const result = await axios.post("http://localhost:8080/seat", {
           flightID: `${localStorage.getItem("fid")}`,
         });
         console.log("OMWL", result.data);
@@ -90,7 +90,7 @@ const Flightmap = ({ seat_ }) => {
               key={seat.SeatId}
               id={`seat${seat.SeatId}`}
               className={getSeatClass(seat)}
-              onClick={() => handleClick(seat.SeatNumber, parseFloat(seat.price), seat.Class, seat.SeatId)}
+              onClick={() => handleClick(seat.SeatNumber, seat.seat_price, seat.Class, seat.SeatId)}
               style={
                 clickedSeat === seat.SeatId
                   ? { border: "3px solid black", scale: "1.1" }

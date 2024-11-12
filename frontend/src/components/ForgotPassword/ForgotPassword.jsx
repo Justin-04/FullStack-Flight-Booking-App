@@ -13,7 +13,7 @@ const ForgotPassword = () => {
     setShowPopup(true);
     setMessage("If your email is correct, you will receive a new password!");
     try {
-      await axios.post("http://192.168.1.73:8080/email/forgotPass", {
+      await axios.post("http://localhost:8080/email/forgotPass", {
         email,
       });
     } catch (e) {

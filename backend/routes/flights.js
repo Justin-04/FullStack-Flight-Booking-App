@@ -22,7 +22,8 @@ router.post("/", (req, res) => {
             if (err) {
                 console.error(err);
                 res.status(500).send("An error occurred while fetching the flights.");
-            } else {
+            } 
+            else {
                 res.send(results);
             }
         });

@@ -16,7 +16,10 @@ function App() {
 
   useEffect(()=>{
     if(localStorage.getItem("token")===null){
-      setLogin(true); //BUG might cause a problem later
+      setLogin(false); //BUG might cause a problem later
+    }
+    else{
+      setLogin(true);
     }
   },[]);
 

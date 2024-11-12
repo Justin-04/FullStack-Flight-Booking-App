@@ -25,6 +25,7 @@ const Checkout = ({ checkoutEntry,message }) => {
     localStorage.removeItem("date");
     localStorage.removeItem("fid");
     localStorage.removeItem("seatId");
+    localStorage.removeItem("FlightPrice");
     message();
   }
   return (

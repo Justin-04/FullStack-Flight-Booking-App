@@ -36,7 +36,7 @@ const Search = ({ userID }) => {
 async function handleCart(fid) {
   try {
     const result =await axios.post(
-      "http://192.168.1.73:8080/cart",
+      "http://localhost:8080/cart",
       { flightID: fid },
       {
         headers: {
@@ -58,7 +58,7 @@ async function handleCart(fid) {
   async function handleSearch() {
     setLoading(true);
     try {
-      const results = await axios.post("http://192.168.1.73:8080/flight", 
+      const results = await axios.post("http://localhost:8080/flight", 
         {
           departure,
           arrival,
@@ -200,8 +200,11 @@ async function handleCart(fid) {
           </center>
         ) : (
           <div className="search-result">
-            <Reorder.Group axis="y" values={flights} onReorder={setFlights}>
-              {flights.map((flight) => (
+          <Reorder.Group axis="y" values={flights} onReorder={setFlights}>
+            {flights.map((flight) => 
+              flight.flight_status === 'Full' ? (
+                ""
+              ) : (
                 <Reorder.Item
                   key={flight.FlightId}
                   value={flight}
@@ -214,8 +217,7 @@ async function handleCart(fid) {
                     <strong>To:</strong> {flight.To}
                   </span>
                   <span className="column date">
-                    <strong>Date:</strong>{" "}
-                    {new Date(flight.Date).toLocaleDateString()}
+                    <strong>Date:</strong> {new Date(flight.Date).toLocaleDateString()}
                   </span>
                   <span className="column duration">
                     <strong>Duration:</strong> {flight.Duration} hrs
@@ -224,7 +226,7 @@ async function handleCart(fid) {
                     <strong>Price:</strong> ${flight.Price}
                   </span>
                   <span className="column action">
-                    {userID  ? (
+                    {userID ? (
                       <motion.button
                         whileTap={{ scale: 0.9 }}
                         onClick={() => handleCart(flight.FlightID)}
@@ -236,9 +238,10 @@ async function handleCart(fid) {
                     )}
                   </span>
                 </Reorder.Item>
-              ))}
-            </Reorder.Group>
-          </div>
+              )
+            )}
+          </Reorder.Group>
+        </div>        
         )}
       </div>
     </div>

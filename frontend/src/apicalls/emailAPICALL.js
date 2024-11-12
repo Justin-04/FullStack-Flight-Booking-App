@@ -2,11 +2,11 @@ import axios from "axios";
 export const emailCall = async () => {
     try {
       await axios.post(
-        "http://192.168.1.73:8080/email",
+        "http://localhost:8080/email",
         {
           flightId: localStorage.getItem("fid"),
           date: localStorage.getItem("date"),
-          price: localStorage.getItem("price"),
+          price: (parseFloat(localStorage.getItem("price")) + parseFloat(localStorage.getItem("FlightPrice"))),
           seatNumber: localStorage.getItem("clickedSeat"),
           seatClass: localStorage.getItem("class"),
         },

@@ -1,7 +1,7 @@
 const express = require("express");
 const mysql = require("mysql");
 const connection = require("./database/Mysql");
-const user=require('./routes/userauth');
+const user=require('./routes/user');
 const cors = require("cors");
 const flights = require("./routes/flights");
 const seat=require("./routes/seat");
@@ -19,5 +19,5 @@ app.use("/email",email);
 
 const PORT = 8080;
 app.listen(PORT, () => {
-  console.log(`Server is running on http://192.168.1.73:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

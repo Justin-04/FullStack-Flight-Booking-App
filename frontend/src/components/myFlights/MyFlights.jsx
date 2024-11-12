@@ -12,7 +12,7 @@ const MyFlights = ({ onFlightSelect }) => {
   const handleFlight = (flightId,price,date) => {
     onFlightSelect(flightId,price,date);
     localStorage.setItem("fid",flightId);
-    console.log("LOSLLASLSAL",flightId);
+    localStorage.setItem("FlightPrice",price);
     setFlight_ID(flightId);
   };
 
@@ -25,7 +25,7 @@ useEffect(() => {
 
   const fetchAllData = async () => {
     try {
-      const result = await axios.get("http://192.168.1.73:8080/cart/getall",
+      const result = await axios.get("http://localhost:8080/cart/getall",
         {
           headers:{
             authorization: `${localStorage.getItem("token")}`,

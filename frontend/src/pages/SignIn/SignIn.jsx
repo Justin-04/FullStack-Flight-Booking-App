@@ -20,7 +20,7 @@ const SignIn = ({handleID}) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const result = await axios.post("http://192.168.1.73:8080/user/login", {
+      const result = await axios.post("http://localhost:8080/user/login", {
         username,
         password,
       });

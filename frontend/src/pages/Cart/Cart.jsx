@@ -50,7 +50,7 @@ const Cart = ({ cart }) => {
     ccv: "***",
     flightID: localStorage.getItem("fid" || "none"),
     seat: localStorage.getItem("clickedSeat" || "none"),
-    price: price,
+    price: (parseFloat(localStorage.getItem("price")) + parseFloat(localStorage.getItem("FlightPrice"))),
     meal: localStorage.getItem("meal" || "none"),
   };
 
@@ -60,7 +60,7 @@ const Cart = ({ cart }) => {
 
   const handleFlight1 = (id1,price_,date) => {
     setFid(id1);
-    setPrice(parseInt(price_));
+    setPrice(price+parseInt(price_));
     setPage("Map");
     localStorage.setItem("date",date);
     setCompletedSteps([...completedSteps, "Flights"]);
