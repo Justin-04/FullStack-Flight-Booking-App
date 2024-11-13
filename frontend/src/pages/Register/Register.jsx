@@ -8,6 +8,7 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [phoneNumber,setPhoneNumber] =useState('');
   const [registerError, setRegisterError] = useState('');
   const navigate = useNavigate();
 
@@ -23,7 +24,8 @@ const Register = () => {
       const result = await axios.post('http://localhost:8080/user/register', {
         username,
         password,
-        email
+        email,
+        phoneNumber
       });
 
       if (result.status === 201) {
@@ -71,6 +73,21 @@ const Register = () => {
                 placeholder="EMAIL"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)} 
+                required
+              />
+            </label>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="phone">
+              <i className="fas fa-envelope"></i>
+              <input
+                type="text"
+                id="phone"
+                name="phone"
+                placeholder="PHONE NUMBER"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)} 
                 required
               />
             </label>

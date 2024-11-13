@@ -34,7 +34,6 @@ const Flightmap = ({ seat_ }) => {
         const result = await axios.post("http://localhost:8080/seat", {
           flightID: `${localStorage.getItem("fid")}`,
         });
-        console.log("OMWL", result.data);
         setData(result.data);
       } catch (error) {
         console.log(error);

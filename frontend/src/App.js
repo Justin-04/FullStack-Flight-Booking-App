@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { useEffect, useState, createContext } from "react";
 import SignIn from "./pages/SignIn/SignIn";
@@ -8,46 +7,55 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Cart from "./pages/Cart/Cart";
 import Profile from "./pages/Profile/Profile";
 import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
+import Admin from "./pages/Admin/Admin";
 
 const MyContext = createContext();
 
 function App() {
   const [loggedin, setLogin] = useState(false);
-
-  useEffect(()=>{
-    if(localStorage.getItem("token")===null){
+  const [admin, setAdmin] = useState(false);
+  useEffect(() => {
+    if (localStorage.getItem("token") === null) {
       setLogin(false); //BUG might cause a problem later
+    } else {
+      if (localStorage.getItem("role") === "admin") {
+        setAdmin(true);
+      } else {
+        setLogin(true);
+      }
     }
-    else{
-      setLogin(true);
-    }
-  },[]);
-
-  
+  }, []);
 
   const handleID = () => {
     setLogin(true);
     localStorage.setItem("log", true);
+
+    if (localStorage.getItem("role") === "admin") {
+      setAdmin(true);
+    }
   };
 
   const handleLogOut = () => {
     setLogin(false);
+    setAdmin(false);
     console.log(loggedin);
     localStorage.clear();
   };
   return (
     <Router>
-      {loggedin ? (
+      {admin ? (
+        <Routes>
+          <Route path="/" element={<Admin />} />
+          <Route path="/signin" element={<SignIn handleID={handleID} />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgotPass" element={<ForgotPassword />} />
+        </Routes>
+      ) : loggedin ? (
         <MyContext.Provider value={loggedin}>
           <Routes>
             <Route
               path="/"
-              element={
-                <Main
-                  id={loggedin}
-                  handleLogOut={handleLogOut}
-                />
-              }
+              element={<Main id={loggedin} handleLogOut={handleLogOut} />}
             />
             <Route path="/cart" element={<Cart />} />
             <Route path="/profile" element={<Profile />} />
@@ -58,12 +66,7 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={
-                <Main
-                id={loggedin}
-                  handleLogOut={handleLogOut}
-                />
-              }
+              element={<Main id={loggedin} handleLogOut={handleLogOut} />}
             />
             <Route path="/signin" element={<SignIn handleID={handleID} />} />
             <Route path="/register" element={<Register />} />

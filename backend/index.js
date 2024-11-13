@@ -1,12 +1,13 @@
 const express = require("express");
-const mysql = require("mysql");
-const connection = require("./database/Mysql");
-const user=require('./routes/user');
+
+
 const cors = require("cors");
+const user=require('./routes/user');
 const flights = require("./routes/flights");
 const seat=require("./routes/seat");
 const cart=require("./routes/cart");
 const email=require("./routes/email");
+
 const app = express();
 app.use(cors());
 app.use(express.json());

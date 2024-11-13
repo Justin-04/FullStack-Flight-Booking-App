@@ -63,6 +63,20 @@ h3 {
   display: inline-block;
 }
 
+.profile-button{
+color: white;
+background-color: #3d88e3;
+border: none;
+border-radius: 10px;
+margin: 10px;
+padding: 10px;
+
+}
+
+.profile-button:hover{
+  background-color: #2b5b9a;
+  cursor: pointer;
+}
 @media (max-width: 600px) {
   .profile-container {
     width: 90%;

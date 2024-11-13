@@ -3,10 +3,11 @@ const jwt = require("jsonwebtoken");
 const connection = require("../database/Mysql");
 const dotenv = require("dotenv");
 
+
 dotenv.config();
 
 const register = async (req, res) => {
-  const { username, password, email } = req.body;
+  const { username, password, email, phoneNumber} = req.body;
 
   try {
     const saltRounds = 10;
@@ -19,8 +20,9 @@ const register = async (req, res) => {
         if (result.length > 0) {
           return res.status(409).send("User already exists");
         } else {
-          const sql = "INSERT INTO user (username, password, role, email) VALUES (?, ?, 'user', ?)";
-          connection.query(sql, [username, hashedPassword, email], (err) => {
+          const sql =
+            "INSERT INTO user (username, password, role, email, phoneNumber) VALUES (?, ?, 'user', ?, ?)";
+          connection.query(sql, [username, hashedPassword, email, phoneNumber], (err) => {
             if (err) {
               console.error("Error registering user:", err);
               return res.status(500).send("Error registering user");
@@ -61,7 +63,12 @@ const login = async (req, res) => {
         }
 
         const token = jwt.sign(
-          { userID: user.userID, username: user.username, role: user.role, email: user.email },
+          {
+            userID: user.userID,
+            username: user.username,
+            role: user.role,
+            email: user.email,
+          },
           process.env.SECRET_KEY,
           { expiresIn: "1h" }
         );
@@ -75,4 +82,17 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+const getProfile = (req, res) => {
+  const token = req.header("authorization");
+  const decoded = jwt.verify(token, process.env.SECRET_KEY);
+
+  const sql="Select * from user where userID=?";
+  connection.query(sql,[decoded.userID],(err,result)=>{
+    if(err){
+      res.status(404).send("User not found");
+    }
+    res.send(result);
+  })
+};
+
+module.exports = { register, login, getProfile };
