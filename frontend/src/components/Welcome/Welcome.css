@@ -33,6 +33,7 @@
     border-radius: 25px;
     font-size: 1.2em;
     cursor: pointer;
+    margin-top: 5%;
   }
   @media (max-width: 768px) {
     .hollow{

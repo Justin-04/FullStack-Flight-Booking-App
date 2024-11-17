@@ -1,9 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=Poetsen+One&family=Prosto+One&family=Sedan+SC&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Press+Start+2P&display=swap');
 .profile-container {
+  background-color: whitesmoke;
   width: 80%;
-  font-family: "Prosto One", sans-serif;
+    font-family: "Barlow Condensed", sans-serif; 
+    font-size: 1.5em;
   max-width: 800px;
-  height: auto;
+  height: 50vh;
   display: flex;
   flex-wrap: wrap;
   border: 1px solid #ccc;
@@ -36,9 +38,11 @@
   flex: 1;
   padding: 20px;
 }
+
 .profile-right-section h3 {
   border-bottom: 2px solid black;
 }
+
 .profile-data {
   text-align: center;
 }
@@ -63,22 +67,39 @@ h3 {
   display: inline-block;
 }
 
-.profile-button{
-color: white;
-background-color: #3d88e3;
-border: none;
-border-radius: 10px;
-margin: 10px;
-padding: 10px;
-
+.profile-button {
+  color: white;
+  background-color: #3d88e3;
+  border: none;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 10px;
 }
 
-.profile-button:hover{
+.profile-button:hover {
   background-color: #2b5b9a;
   cursor: pointer;
 }
+
 @media (max-width: 600px) {
   .profile-container {
     width: 90%;
+  }
+.profile-left-section{
+  margin-bottom: 20px;
+}
+  .profile-left-section,
+  .profile-right-section {
+    flex: 0 0 100%; 
+    padding: 10px; 
+  }
+
+  .profile-left-section .profile-data img {
+    width: 80px; 
+    height: 80px;
+  }
+
+  .profile-button {
+    width: 100%; 
   }
 }

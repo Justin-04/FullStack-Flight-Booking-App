@@ -32,6 +32,7 @@
   }
   
   .nav-links li a:hover {
+    cursor: pointer;
     color: #ffcccb;
   }
   

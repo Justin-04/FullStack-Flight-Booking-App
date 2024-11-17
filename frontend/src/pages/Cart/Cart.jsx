@@ -21,7 +21,7 @@ const Cart = ({ cart }) => {
   const [completedSteps, setCompletedSteps] = useState([]);
   const [meal, setMeal] = useState("");
 
-  const handleCard = (cardNumber, expiryDate, cardOwner, ccv) => {
+  const handleCard = (cardNumber, expiryDate, cardOwner, ccv) => { //TODO remove ccv
     setCardNumber1(cardNumber);
     setExpiryDate1(expiryDate);
     setCardOwner1(cardOwner);
@@ -92,19 +92,6 @@ const Cart = ({ cart }) => {
 
   return (
     <div className="main-cart">
-      <Link
-        to="/"
-        style={{
-          textDecoration: "none",
-          border: "1px solid black",
-          borderRadius: "15px",
-          padding: "4px",
-          backgroundColor: "blue",
-          color: "white",
-        }}
-      >
-        Go Back to Home Page
-      </Link>
       <ul>
         <li
           onClick={() => handleClick_("Flights")}
@@ -144,6 +131,12 @@ const Cart = ({ cart }) => {
           Checkout
         </li>
       </ul>
+      <Link
+        to="/"
+        className="go-back-home"
+      >
+        Home Page
+      </Link>
       {element}
     </div>
   );

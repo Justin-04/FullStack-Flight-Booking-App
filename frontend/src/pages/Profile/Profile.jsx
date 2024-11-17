@@ -4,9 +4,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
-  const [data, setData] = useState(null);         // Stores the profile data fetched from the database
-  const [isEditing, setIsEditing] = useState(false); // Tracks if edit mode is enabled
-  const [editedData, setEditedData] = useState({});  // Stores edited profile data
+  const [data, setData] = useState(null);         
+  const [isEditing, setIsEditing] = useState(false); 
+  const [editedData, setEditedData] = useState({}); 
 
   const navigate = useNavigate();
 
@@ -19,7 +19,7 @@ const Profile = () => {
           },
         });
         setData(result.data);
-        setEditedData(result.data);  // Initialize editedData with fetched profile data
+        setEditedData(result.data);  
       } catch (error) {
         console.log(error);
       }
@@ -27,14 +27,13 @@ const Profile = () => {
     fetchData();
   }, []);
 
-  // Toggle edit mode and copy current data to editedData
   const handleEditClick = () => {
     setIsEditing(true);
-    setEditedData(data); // Copy data into editedData for editing
+    setEditedData(data); 
   };
 
-  // Save edited data to backend and exit edit mode
   const handleDoneClick = async () => {
+    
     navigate('/profile');
     try {
       await axios.put("http://localhost:8080/user/updateProfile", editedData, {
@@ -42,14 +41,15 @@ const Profile = () => {
           authorization: `${localStorage.getItem("token")}`,
         },
       });
-      setData(editedData);  // Update displayed profile data
-      setIsEditing(false);  // Exit edit mode
+      setData(editedData);  
     } catch (error) {
       console.log(error);
     }
+    finally{
+      setIsEditing(false);  
+    }
   };
 
-  // Update editedData fields on input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditedData((prevData) => ({
@@ -62,7 +62,7 @@ const Profile = () => {
     <div>
       <button className="profile-button" onClick={() => navigate("/")}>Go back Home</button>
       {data === null ? (
-        <p>Loading...</p>  // Loading message
+        <p>Loading...</p>  //TODO ADD LOADER
       ) : (
         <div className="profile-container">
           <div className="profile-left-section">
@@ -82,13 +82,19 @@ const Profile = () => {
           </div>
           <div className="profile-right-section">
             <center>
-              <h3>Information</h3>
+              <h3
+              style={{
+                marginBottom:"20%",
+              }}
+              
+              >Information</h3>
             </center>
             <div className="email">
               <span
                 style={{
                   borderBottom: "2px solid black",
                   width: "50px",
+                  marginRight:"5px",
                   fontWeight: "600",
                 }}
               >
@@ -110,6 +116,7 @@ const Profile = () => {
                 style={{
                   borderBottom: "2px solid black",
                   width: "60px",
+                  marginRight:"5px",
                   fontWeight: "600",
                 }}
               >

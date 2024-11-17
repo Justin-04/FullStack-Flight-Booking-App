@@ -1,7 +1,7 @@
 const connection =require('../database/Mysql.js');
 
 
-exports.getFlights = async (req,res) =>{
+exports.getFlights = async (req,res) =>{ //TODO SERVICE LAYER LOGIC AND FIX GETFLIGHTS
     const { departure, arrival, date } = req.body;
     
     if (departure && arrival && date) {
