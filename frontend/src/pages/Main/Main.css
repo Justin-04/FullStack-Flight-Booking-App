@@ -18,3 +18,20 @@
         height: 95vh;
     }
 }
+
+.chat-button{
+    position: fixed;
+    top: 85vh;
+    left: 95%;
+    background-color: none;
+    border: none;
+    border-radius: 45px;
+}
+
+.chat-button img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid white;
+    cursor: pointer;
+}
