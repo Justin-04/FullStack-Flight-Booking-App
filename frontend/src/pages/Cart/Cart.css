@@ -34,8 +34,19 @@
   position: absolute;
   padding: 10px;
   top: 10px;
+  left: 5px;
 }
 
 .go-back-home:hover {
   background-color: #1e90ff;
+}
+
+@media screen and (max-width: 1102px) {
+  .go-back-home{
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
+  .main-cart ul{
+    margin-top: 50px ;
+  }
 }

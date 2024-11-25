@@ -4,7 +4,17 @@
     min-height: 85vh;
     color: white;
   }
-  
+ i{
+  overflow: hidden;
+  position: relative;
+  font-size: 1.2em;
+  left: 95%;
+  z-index: 1;
+ }
+ i:hover{
+  cursor: pointer;
+  color: red;
+ }
   .flights h1 {
     justify-content: center;
     color: white;
@@ -82,4 +92,11 @@
       .flight-info button{
         margin-top: 10px;
       }
+      .close-flight{
+        width: 15px;
+        left: 92%;
+      }
+
     }
+
+  

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./MyFlight.css";
 import { motion } from 'framer-motion';
 import axios from "axios";
-
+import close from "../../images/x-symbol.svg";
 
 const MyFlights = ({ onFlightSelect }) => {
   const [flights, setFlights] = useState([]); 
@@ -21,7 +21,19 @@ useEffect(() => {
   fetchAllData();
 }, []);
 
-
+const handleDelete = async (flight_id) => {
+  try {
+    await axios.delete(`http://localhost:8080/cart/delete`, {
+      params: { flight_id}, 
+      headers: {
+        authorization: `${localStorage.getItem("token")}`, 
+      },
+    });
+    fetchAllData(); 
+  } catch (e) {
+    console.error("Error deleting flight:", e);
+  }
+};
 
   const fetchAllData = async () => {
     try {
@@ -61,8 +73,10 @@ useEffect(() => {
                 className="flight-card"
               >
                 <div className="flight-info">
+                <i onClick={()=>handleDelete(flight.FLightID)}className="fa-solid fa-x"></i>
                   <center><h2>Flight to {flight.To}</h2></center>
                   <div>
+                  
                     <p><strong>From:</strong> {flight.From}</p>
                     <p><strong>To:</strong> {flight.To}</p>
                     <p><strong>Date:</strong> {flight.Date}</p>

@@ -1,13 +1,11 @@
-/* Blue background and centered container */
 .background-register {
-    background-color: #1E90FF; /* Blue background */
-    height: 100vh; /* Full viewport height */
+    background-color: #1E90FF;
+    height: 100vh; 
     display: flex;
     justify-content: center;
     align-items: center;
   }
   
-  /* White container for the registration form */
   .register-container {
     background-color: white;
     padding: 30px;
@@ -17,12 +15,10 @@
     text-align: center;
   }
   
-  /* Form group styling */
   .form-group {
     margin-bottom: 20px;
   }
   
-  /* Input field styling */
   input[type="text"],
   input[type="email"],
   input[type="password"] {
@@ -35,9 +31,8 @@
     box-sizing: border-box;
   }
   
-  /* Register button styling */
   .register-btn {
-    background-color: #ff0000; /* Red background for register */
+    background-color: #ff0000; 
     color: white;
     border: none;
     padding: 12px;
@@ -49,10 +44,9 @@
   }
   
   .register-btn:hover {
-    background-color: #d40000; /* Darker red on hover */
+    background-color: #d40000; 
   }
   
-  /* Styling for the registration error message */
   .register-error {
     color: red;
     font-size: 14px;

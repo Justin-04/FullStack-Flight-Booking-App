@@ -3,11 +3,10 @@ const jwt = require("jsonwebtoken");
 const connection = require("../database/Mysql");
 const dotenv = require("dotenv");
 
-
 dotenv.config();
 
 const register = async (req, res) => {
-  const { username, password, email, phoneNumber} = req.body;
+  const { username, password, email, phoneNumber } = req.body;
 
   try {
     const saltRounds = 10;
@@ -22,13 +21,17 @@ const register = async (req, res) => {
         } else {
           const sql =
             "INSERT INTO user (username, password, role, email, phoneNumber) VALUES (?, ?, 'user', ?, ?)";
-          connection.query(sql, [username, hashedPassword, email, phoneNumber], (err) => {
-            if (err) {
-              console.error("Error registering user:", err);
-              return res.status(500).send("Error registering user");
+          connection.query(
+            sql,
+            [username, hashedPassword, email, phoneNumber],
+            (err) => {
+              if (err) {
+                console.error("Error registering user:", err);
+                return res.status(500).send("Error registering user");
+              }
+              res.status(201).send("User registered successfully");
             }
-            res.status(201).send("User registered successfully");
-          });
+          );
         }
       }
     );
@@ -86,13 +89,48 @@ const getProfile = (req, res) => {
   const token = req.header("authorization");
   const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
-  const sql="Select * from user where userID=?";
-  connection.query(sql,[decoded.userID],(err,result)=>{
-    if(err){
+  const sql = "Select * from user where userID=?";
+  connection.query(sql, [decoded.userID], (err, result) => {
+    if (err) {
       res.status(404).send("User not found");
     }
     res.send(result);
-  })
+  });
 };
 
-module.exports = { register, login, getProfile };
+const updateProfile = (req, res) => {
+  const token = req.header("authorization");
+  const decoded = jwt.verify(token, process.env.SECRET_KEY);
+
+  const { email, phoneNumber, username } = req.body;
+  if (email && phoneNumber && username) {
+    connection.query(
+      "Select  * from user where username=?",
+      [username],
+      (err, result) => {
+        if (err) {
+          res.status(500).send("Internal error");
+        }
+        if (result.length > 0) {
+          res.status(403).send("Username already exists");
+        }
+        if (result.length === 0) {
+          connection.query(
+            "UPDATE user SET username=?, phoneNumber=?, email=? WHERE userId=?",
+            [username, phoneNumber, email, decoded.userID],
+            (err) => {
+              if (err) {
+                return res.status(500).send("Internal error");
+              }
+              res.status(200).send("Profile updated successfully");
+            }
+          );
+        }
+      }
+    );
+  } else {
+    res.status(500).send("All values should be valid");
+  }
+};
+
+module.exports = { register, login, getProfile, updateProfile };

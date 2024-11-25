@@ -52,3 +52,18 @@ exports.addToCart = (req, res) => {
       }
     );
   }
+
+
+  exports.deleteFromCart= (req,res)=>{
+    const token = req.header("authorization");
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const {flight_id}=req.query;
+
+    let sql="DELETE FROM cart WHERE flightID=? AND userID=?";
+    connection.query(sql,[flight_id,decoded.userID],(err,result)=>{
+      if(err){
+        res.status(500).send("Internal Error");
+      }
+      res.status(200).send("Deleted successfully");
+    })
+  }
