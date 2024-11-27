@@ -45,7 +45,7 @@ function App() {
     <Router>
       {admin ? (
         <Routes>
-          <Route path="/" element={<Admin />} />
+          <Route path="/" element={<Admin handleLogOut={handleLogOut} />} />
           <Route path="/signin" element={<SignIn handleID={handleID} />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgotPass" element={<ForgotPassword />} />
