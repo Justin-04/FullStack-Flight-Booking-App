@@ -1,26 +1,22 @@
-const connection = require("../database/Mysql");
+const seatService = require("../services/seatService");
 
 exports.getSeats = (req, res) => {
   const { flightID } = req.body;
 
-  let sql =
-    "SELECT SeatId,SeatNumber,Class,Status,price,seat_price FROM flights f inner join seats s on f.FlightID=s.FlightId where s.`FlightID`=?";
-
-  connection.query(sql, [flightID], (err, results) => {
+  seatService.getSeatsService(flightID, (err, results) => {
     if (err) {
-      console.log(err);
-    } else {
-      res.send(results);
+      console.error("Error fetching seats:", err);
+      return res.status(500).send("Error fetching seats.");
     }
+    res.send(results);
   });
 };
 
 exports.addSeat = (req, res) => {
   const { seatID, flightID } = req.body;
-  const status_ = "Full";
+  const fullStatus = "Full";
 
-  const updateSeatSql = "UPDATE seats SET Status = 'Booked' WHERE SeatID = ?";
-  connection.query(updateSeatSql, [seatID], (err, seatResults) => {
+  seatService.updateSeatStatus(seatID, (err, seatResults) => {
     if (err) {
       console.error("Error updating seat status:", err);
       return res.status(500).send("Error updating seat status.");
@@ -30,8 +26,7 @@ exports.addSeat = (req, res) => {
       return res.status(404).send("Seat not found or already booked.");
     }
 
-    const checkSeatsSql = "SELECT Status FROM seats WHERE FlightID = ?";
-    connection.query(checkSeatsSql, [flightID], (err, seatStatuses) => {
+    seatService.getFlightSeatStatuses(flightID, (err, seatStatuses) => {
       if (err) {
         console.error("Error checking seat statuses:", err);
         return res.status(500).send("Error checking seat statuses.");
@@ -42,18 +37,15 @@ exports.addSeat = (req, res) => {
       );
 
       if (allSeatsBooked) {
-        const updateFlightSql =
-          "UPDATE flights SET flight_status = ? WHERE FlightID = ?";
-        connection.query(updateFlightSql, [status_, flightID], (err) => {
+        seatService.updateFlightStatus(flightID, fullStatus, (err) => {
           if (err) {
             console.error("Error updating flight status:", err);
             return res.status(500).send("Error updating flight status.");
           }
 
-          const deleteFromCart = "DELETE FROM cart WHERE FlightID = ?";
-          connection.query(deleteFromCart, [flightID], (err) => {
+          seatService.deleteFromCart(flightID, (err) => {
             if (err) {
-              console.error("Error deleting from cart:", err);
+              console.error("Error deleting flight from carts:", err);
               return res.status(500).send("Error deleting flight from carts.");
             }
 
