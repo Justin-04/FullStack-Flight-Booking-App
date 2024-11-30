@@ -33,6 +33,10 @@ const Flightmap = ({ seat_ }) => {
       try {
         const result = await axios.post("http://localhost:8080/seat", {
           flightID: `${localStorage.getItem("fid")}`,
+        }, {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`,
+          },
         });
         setData(result.data);
       } catch (error) {

@@ -3,3 +3,55 @@
   padding: 0;
   overflow-x: hidden ;
 }
+
+.timeout{
+  position: fixed;
+  background-color: whitesmoke;
+  border-radius: 10px;
+  margin-left: 50% ;
+  transform: translateX(-50%);
+  width: 60%;
+  margin-top: 30px;
+  justify-content: center;
+  text-align: center;
+  height: 270px;
+  z-index: 9999;
+}
+.timeout h2{
+  margin-top: 10px;
+}
+
+.timeout div{
+  margin-top: 40px;
+}
+
+.timeout button{
+  padding: 10px;
+  color: white;
+  background-color:#3d88e3 ;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  margin-top: 10% ;
+  box-shadow: 0 0 10px rgba(163, 24, 24, 0.1);
+  width: 80%;
+}
+.close-chat-timeout{
+  width: 20px;
+  margin: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-left: 93% ;
+}
+
+@media screen and (max-width: 600px){
+  .timeout{
+    .close-chat-timeout{
+      margin-left: 90% ;
+    }
+  }
+  
+}
+.timeout button:hover{
+  background-color: #316cb4;
+}

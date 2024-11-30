@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const {getSeats,addSeat} = require("../controller/seatController");
+const verifyToken = require("../auth/userAuth");
 
-router.post("/",getSeats);
-router.put("/addSeat", addSeat);
+router.post("/",verifyToken,getSeats);
+router.put("/addSeat",verifyToken,addSeat);
 
 // router.put("/addSeat", (req, res) => {
 //   const { seatID } = req.body;

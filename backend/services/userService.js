@@ -42,7 +42,7 @@ const loginUser = (username, password, callback) => {
           email: user.email,
         },
         process.env.SECRET_KEY,
-        { expiresIn: "30m" }
+        { expiresIn: "1m" }
       );
       callback(null, { token, role: user.role });
     }

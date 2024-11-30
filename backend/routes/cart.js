@@ -5,7 +5,7 @@ const {addToCart,getCart,deleteFromCart} =require("../controller/cartController"
 
 router.post("/", verifyToken, addToCart);
 
-router.get("/getall", getCart );
+router.get("/getall",verifyToken, getCart );
 
 router.delete("/delete",verifyToken,deleteFromCart);
 

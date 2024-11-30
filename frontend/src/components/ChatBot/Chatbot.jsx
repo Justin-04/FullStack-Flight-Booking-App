@@ -23,6 +23,10 @@ const Chatbot = ({handleChatBot}) => {
     try {
       const response = await axios.post("http://localhost:8080/openAi/getResponse", {
         input: newUserMessage.text,
+      },  {
+        headers: {
+          Authorization: `${localStorage.getItem("token")}`,
+        },
       });
 
       const botMessage = { sender: "bot", text: response.data.message };

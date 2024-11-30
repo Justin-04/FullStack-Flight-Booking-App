@@ -1,27 +1,34 @@
-const userService = require("../services/userService");
+const jwt = require("jsonwebtoken");
+const {
+  passwordGenerator,
+  renderTicketTemplate,
+  sendTicketEmail,
+  findUserByEmail,
+  updateUserPassword,
+  hashPassword,
+} = require("../services/emailService");
 
 exports.sendTicketConfirmation = (req, res) => {
   const token = req.header("authorization");
+  const decoded = jwt.verify(token, process.env.SECRET_KEY);
   const { flightId, date, price, seatNumber, seatClass } = req.body;
+  const email = decoded.email;
+  const name = decoded.username;
 
-  userService.verifyToken(token, (err, decoded) => {
+  const templateData = { flightId, name, email, date, price, seatNumber, seatClass };
+
+  renderTicketTemplate(templateData, (err, renderedTemplate) => {
     if (err) {
-      return res.status(401).send({ success: false, error: "Invalid token" });
+      console.error("Error rendering EJS template:", err);
+      return res.status(500).send({ success: false, error: "EJS render error" });
     }
 
-    const { email, username } = decoded;
-
-    userService.renderTicketEmail({ flightId, name: username, email, date, price, seatNumber, seatClass }, (err, emailData) => {
+    sendTicketEmail(email, "Ticket Confirmation", renderedTemplate, (err, result) => {
       if (err) {
-        return res.status(500).send({ success: false, error: "EJS render error" });
+        console.error("Error sending email:", err);
+        return res.status(500).send({ success: false, error: err.message });
       }
-
-      userService.sendEmail(email, 'Ticket Confirmation', emailData, (err, result) => {
-        if (err) {
-          return res.status(500).send({ success: false, error: "Error sending email" });
-        }
-        res.status(200).send({ success: true, result });
-      });
+      res.status(200).send({ success: true, result });
     });
   });
 };
@@ -29,36 +36,37 @@ exports.sendTicketConfirmation = (req, res) => {
 exports.resetPassword = (req, res) => {
   const { email } = req.body;
 
-  userService.findUserByEmail(email, (err, user) => {
+  findUserByEmail(email, (err, result) => {
     if (err) {
+      console.error("Error querying the database:", err);
       return res.status(500).send("Server error occurred.");
     }
 
-    if (!user) {
+    if (result.length === 0) {
       return res.status(404).send("Email not found.");
     }
 
-    userService.generatePassword((err, newPassword) => {
+    const newPassword = passwordGenerator();
+
+    hashPassword(newPassword, (err, hashedPassword) => {
       if (err) {
-        return res.status(500).send("Error generating password.");
+        console.error("Error hashing password:", err);
+        return res.status(500).send("Error hashing the password.");
       }
 
-      userService.hashPassword(newPassword, (err, hashedPassword) => {
+      updateUserPassword(result[0].userID, hashedPassword, (err) => {
         if (err) {
-          return res.status(500).send("Error hashing password.");
+          console.error("Error updating the password in the database:", err);
+          return res.status(500).send("Error updating the password.");
         }
 
-        userService.updateUserPassword(user.userID, hashedPassword, (err) => {
+        sendTicketEmail(email, "Password reset", `Your new password is: ${newPassword}`, (err) => {
           if (err) {
-            return res.status(500).send("Error updating the password.");
+            console.error("Error sending email:", err);
+            return res.status(500).send("Failed to send the email.");
           }
 
-          userService.sendEmail(email, "Password reset", `Your new password is: ${newPassword}`, (err, result) => {
-            if (err) {
-              return res.status(500).send("Failed to send the email.");
-            }
-            res.status(200).send("Password reset successfully. Check your email for the new password.");
-          });
+          res.status(200).send("Password reset successfully. Check your email for the new password.");
         });
       });
     });

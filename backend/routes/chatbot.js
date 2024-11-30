@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const OpenAI = require('openai');
+const verifyToken = require('../auth/userAuth');
 
 dotenv.config();
 
@@ -10,7 +11,7 @@ const client = new OpenAI({
 
 const router = express.Router();
 
-router.post("/getResponse", async (req, res) => {
+router.post("/getResponse",verifyToken, async (req, res) => {
   try {
     const userInput = req.body.input || 'Say this is a test';
 
