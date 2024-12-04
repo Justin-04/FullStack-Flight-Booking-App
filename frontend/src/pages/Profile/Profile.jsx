@@ -7,7 +7,8 @@ const Profile = () => {
   const [data, setData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState({});
-  const [error, setError] = useState(false); // Tracks if username exists
+  const [error, setError] = useState(false); 
+  const [inputErrors, setInputErrors] = useState({}); 
   const navigate = useNavigate();
 
   const fetchData = async () => {
@@ -34,25 +35,44 @@ const Profile = () => {
   };
 
   const handleDoneClick = async () => {
-    try {
-      const result = await axios.put(
-        "http://localhost:8080/user/updateProfile",
-        editedData,
-        {
-          headers: {
-            authorization: `${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      setError(false);
-    } catch (error) {
-      console.log(error);
-      setError(true);
-    } finally {
-      setIsEditing(false);
+    if (validateInputs()) {
+      try {
+        await axios.put(
+          "http://localhost:8080/user/updateProfile",
+          editedData,
+          {
+            headers: {
+              authorization: `${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        setError(false);
+      } catch (error) {
+        console.log(error);
+        setError(true);
+      } finally {
+        setIsEditing(false);
+      }
+      fetchData();
     }
+  };
 
-    fetchData();
+  const validateInputs = () => {
+    const errors = {};
+    if (!editedData.username || editedData.username.trim().length < 3) {
+      errors.username = "Username must be at least 3 characters long.";
+    }
+    if (
+      !editedData.email ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editedData.email)
+    ) {
+      errors.email = "Please enter a valid email address.";
+    }
+    if (!editedData.phoneNumber || editedData.phoneNumber.length < 10) {
+      errors.phoneNumber = "Phone number must be at least 10 digits long.";
+    }
+    setInputErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleChange = (e) => {
@@ -60,6 +80,10 @@ const Profile = () => {
     setEditedData((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+    setInputErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
     }));
   };
 
@@ -69,8 +93,8 @@ const Profile = () => {
         Go back Home
       </button>
       {data === null ? (
-        <center> 
-        <span class="profile-loader">aaaaa</span>
+        <center>
+          <span className="profile-loader">aaaaa</span>
         </center>
       ) : (
         <div className="profile-container">
@@ -85,18 +109,29 @@ const Profile = () => {
                     value={editedData.username || ""}
                     onChange={handleChange}
                     required
+                    minLength={3}
+                    placeholder="Enter username"
                   />
+                  {inputErrors.username && (
+                    <p style={{ color: "red", fontSize: "12px" }}>
+                      {inputErrors.username}
+                    </p>
+                  )}
                 </div>
               ) : (
                 <>
-                  {" "}
                   <span>Username: {data[0].username}</span>
-                  {error ?<p
-                    style={{ color: "red", fontSize: "12px", marginTop: "4px" }}
-                  >
-                    Username already exists.
-                  </p>:"" }
-                  
+                  {error && (
+                    <p
+                      style={{
+                        color: "red",
+                        fontSize: "12px",
+                        marginTop: "4px",
+                      }}
+                    >
+                      Username already exists.
+                    </p>
+                  )}
                 </>
               )}
             </div>
@@ -123,13 +158,21 @@ const Profile = () => {
                 Email:
               </span>
               {isEditing ? (
-                <input
-                  type="email"
-                  name="email"
-                  value={editedData.email || ""}
-                  onChange={handleChange}
-                  required
-                />
+                <div>
+                  <input
+                    type="email"
+                    name="email"
+                    value={editedData.email || ""}
+                    onChange={handleChange}
+                    required
+                    placeholder="Enter email"
+                  />
+                  {inputErrors.email && (
+                    <p style={{ color: "red", fontSize: "12px" }}>
+                      {inputErrors.email}
+                    </p>
+                  )}
+                </div>
               ) : (
                 <span>{data[0].email}</span>
               )}
@@ -146,13 +189,23 @@ const Profile = () => {
                 Phone:
               </span>
               {isEditing ? (
-                <input
-                  type="text"
-                  name="phoneNumber"
-                  value={editedData.phoneNumber || ""}
-                  onChange={handleChange}
-                  required
-                />
+                <div>
+                  <input
+                    type="text"
+                    name="phoneNumber"
+                    value={editedData.phoneNumber || ""}
+                    onChange={handleChange}
+                    required
+                    minLength={10}
+                    maxLength={15}
+                    placeholder="Enter phone number"
+                  />
+                  {inputErrors.phoneNumber && (
+                    <p style={{ color: "red", fontSize: "12px" }}>
+                      {inputErrors.phoneNumber}
+                    </p>
+                  )}
+                </div>
               ) : (
                 <span>{data[0].phoneNumber}</span>
               )}
@@ -172,4 +225,5 @@ const Profile = () => {
     </div>
   );
 };
+
 export default Profile;

@@ -2,6 +2,7 @@
     position: fixed;
     top: 50vh; 
     left: 83%;
+    width: 400px;
     transform: translate(-50%, -50%); 
     background-color: whitesmoke;
     width: 400px;
@@ -96,9 +97,9 @@
   
   @media (max-width: 768px) {
     .chatbot-main {
-      top: 70vh; 
-      left: 50%; 
-      width: 200px; 
+      top: 60vh; 
+      left: 55%; 
+      width: 300px; 
       transform: translate(-50%, -50%);
     }
   

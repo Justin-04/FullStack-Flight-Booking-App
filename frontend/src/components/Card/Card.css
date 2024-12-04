@@ -4,9 +4,9 @@
     color: #838181;
     -webkit-font-smoothing: antialiased;
     overflow: hidden;
-    display: flex; /* Use flexbox for layout */
-    flex-direction: column; /* Stack elements vertically */
-    align-items: center; /* Center-align items */
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
 }
 
 a {
@@ -38,8 +38,8 @@ a {
 
 .footer {
     margin: 0 auto;
-    width: 100%; /* Full width for responsiveness */
-    max-width: 600px; /* Limit max width */
+    width: 100%;
+    max-width: 600px; 
     text-align: center;
     padding: 0 0 30px 0;
 }
@@ -64,8 +64,8 @@ a {
     position: relative;
     display: inline-block;
     vertical-align: middle;
-    width: 100%; /* Full width for responsiveness */
-    max-width: 425px; /* Limit max width */
+    width: 100%; 
+    max-width: 425px; 
     height: 270px;
     text-align: left;
     padding: 30px;
@@ -136,9 +136,8 @@ a {
 .input-fields {
     position: relative;
     top: -600px;
-    left: 200px;
-    margin: 20px auto;
-    text-align: center;
+    left: -200px;
+    width: 400px;
     height: 400px;
 }
 
@@ -150,7 +149,7 @@ a {
 
 .input-fields input {
     padding: 8px;
-    width: 200px; /* Width for desktop */
+    width: 200px; 
     font-size: 16px;
     border-radius: 5px;
     border: none;
@@ -161,6 +160,8 @@ a {
 padding: 20px;
 color: white;
 background-color: #3937aa;
+position: relative;
+left: -7%;
 outline: none;
 border: none;
 border-radius: 5px;
@@ -173,38 +174,43 @@ border-radius: 5px;
 }
 
 
-/* Responsive Styles */
 @media (min-width: 600px) {
    
     .input-fields {
-      
-        flex-direction: row; /* Align inputs in a row */
-        justify-content: flex-end; /* Align inputs to the right */
-        width: 100%; /* Full width */
+        flex-direction: row; 
+        justify-content: flex-end; 
+        width: 100%; 
+        text-align: end;
     }
 
     .input-fields label {
-        margin: 10px; /* Space between labels */
+        margin: 10px;
+        width: 100% !important;
     }
 
     .input-fields input {
-        width: auto; /* Auto width for input fields */
+        width: auto; 
     }
 }
 
 @media (max-width: 880px) {
     .card {
-        width: 90%; /* Allow the card to take up more width on small screens */
-        max-width: none; /* Remove max width constraint */
+        width: 90%; 
+        max-width: none; 
     }
 
     .input-fields {
+        left: 200px;
+        text-align: center;
         position: static;
-        width: 100%; /* Full width for mobile */
+        width: 100%;
     }
 
     .input-fields input {
-        width: 80%; /* Adjust width for mobile inputs */
+        width: 80%;
+    }
+    .input-fields label {
+        padding: 10px;  
     }
     .panel{
         position:static;

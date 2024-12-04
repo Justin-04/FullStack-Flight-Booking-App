@@ -44,7 +44,7 @@ const Chatbot = ({handleChatBot}) => {
 
   return (
     <motion.div
-    style={{ width: "400px",  fontFamily: "Arial, sans-serif" }} className="chatbot-main">
+    style={{fontFamily: "Arial, sans-serif" }} className="chatbot-main">
         <img className="close-chat" src={close} onClick={handleClick} alt="close"/ >
       <div
         style={{

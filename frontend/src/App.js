@@ -24,14 +24,14 @@ function App() {
         const decoded = jwtDecode(token);
         const currentDateInSeconds = Date.now() / 1000;
         const timeLeftInSeconds = decoded.exp - currentDateInSeconds;
-  
+
         if (timeLeftInSeconds <= 0) {
           setWarning(true);
           handleLogOut();
         }
       }
-    }, 5000); 
-  
+    }, 5000);
+
     return () => clearInterval(interval);
   }, []);
 
@@ -63,18 +63,13 @@ function App() {
     localStorage.clear();
   };
 
-  const handleClick= () =>{
+  const handleClick = () => {
     setWarning(false);
-
-  }
+  };
   return (
     <>
       <Router>
-        {warning ? (
-        <Timeout_ handleClick={handleClick} />
-        ) : (
-          ""
-        )}
+        {warning ? <Timeout_ handleClick={handleClick} /> : ""}
         {admin ? (
           <Routes>
             <Route path="/" element={<Admin handleLogOut={handleLogOut} />} />
@@ -88,22 +83,26 @@ function App() {
                 element={<Main id={loggedin} handleLogOut={handleLogOut} />}
               />
               <Route path="/signin" element={<SignIn handleID={handleID} />} />
+              <Route path="/register" element={<Register />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/profile" element={<Profile />} />
             </Routes>
-            </MyContext.Provider>
+          </MyContext.Provider>
         ) : (
           <>
-          <MyContext.Provider value={loggedin}>
-            <Routes>
-              <Route
-                path="/"
-                element={<Main id={loggedin} handleLogOut={handleLogOut} />}
-              />
-              <Route path="/signin" element={<SignIn handleID={handleID} />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/forgotPass" element={<ForgotPassword />} />
-            </Routes>
+            <MyContext.Provider value={loggedin}>
+              <Routes>
+                <Route
+                  path="/"
+                  element={<Main id={loggedin} handleLogOut={handleLogOut} />}
+                />
+                <Route path="/profile" element={<Profile />} />
+                <Route
+                  path="/signin"
+                  element={<SignIn handleID={handleID} />}
+                />
+                <Route path="/forgotPass" element={<ForgotPassword />} />
+              </Routes>
             </MyContext.Provider>
           </>
         )}

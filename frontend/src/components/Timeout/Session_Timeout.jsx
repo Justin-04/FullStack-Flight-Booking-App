@@ -15,7 +15,7 @@ const Timeout_ = ({handleClick}) => {
   handleClick();
   }
   return (
-    <motion.div drag className="timeout"> 
+    <motion.div  className="timeout"> 
     <img className="close-chat-timeout" src={close} onClick={handleClose} alt="close"/ >
     <h2 >Your session has Expired</h2>
     <div>You have to login again to continue</div>

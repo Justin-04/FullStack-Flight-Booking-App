@@ -100,7 +100,7 @@
     background-color: rgb(210, 91, 91);
     font-size: 1.1rem;
     color: white;
-    font-family: cursive;
+    font-weight: 500;
     padding: 5px;
     border-radius: 5px;
     z-index: 999;
@@ -115,7 +115,7 @@
     background-color: rgb(41, 134, 37);
     font-size: 1.1rem;
     color: white;
-    font-family: cursive;
+    font-weight: 500;
     padding: 5px;
     border-radius: 5px;
     z-index: 999;

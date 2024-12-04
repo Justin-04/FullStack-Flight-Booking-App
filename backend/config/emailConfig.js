@@ -4,7 +4,7 @@ const formData = require("form-data");
 const mailgun = new Mailgun(formData);
 const mg = mailgun.client({
   username: "api",
-  key: process.env.MAILGUN_KEY || "your-mailgun-api-key", // Replace with your API key
+  key: process.env.MAILGUN_KEY || "your-mailgun-api-key",
 });
 
 exports.sendEmail = async (to, subject, text) => {

@@ -4,7 +4,7 @@
   font-family: "Barlow Condensed", sans-serif;
   font-size: 1.5em;
   max-width: 800px;
-  height: 65vh;
+  height: 70vh;
   display: flex;
   flex-wrap: wrap;
   border: 1px solid #ccc;
@@ -76,7 +76,7 @@ h3 {
 }
 
 .profile-button:hover {
-  background-color: #2b5b9a;
+  background-color: #204370;
   cursor: pointer;
 }
 
@@ -92,16 +92,21 @@ h3 {
   border-radius: 10px;
 }
 
+.profile-button-home:hover{
+  background-color: #2a5c9a;
+}
+
 .profile-loader {
-  color: #7145e0;
-  margin-top: 50%;
+  color: #2934b0;
   font-size: 100px;
   text-indent: -9999em;
   overflow: hidden;
   width: 1em;
   height: 1em;
   border-radius: 50%;
+  border: 1px solid black;
   position: absolute;
+  left: 45%;
   margin-top: 30vh;
   margin-bottom: 10px;
   transform: translateZ(0);
@@ -168,5 +173,8 @@ h3 {
 
   .profile-button {
     width: 100%;
+  }
+  .profile-loader{
+  left: 40%;
   }
 }
