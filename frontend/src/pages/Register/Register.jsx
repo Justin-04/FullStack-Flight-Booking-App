@@ -2,21 +2,54 @@ import React, { useState } from 'react';
 import './Register.css';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import passwordsvg from '../../images/eye.svg';
 const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [phoneNumber,setPhoneNumber] =useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [registerError, setRegisterError] = useState('');
+  const [validationError, setValidationError] = useState('');
   const navigate = useNavigate();
+
+  const usernameRegex = /^[a-zA-Z0-9_]{4,20}$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /^\d{8}$/;
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/;
+
+  const handleValidation = () => {
+    if (!usernameRegex.test(username)) {
+      setValidationError(
+        "Username must be 4-20 characters and can include letters, numbers, and underscores."
+      );
+      return false;
+    }
+    if (!emailRegex.test(email)) {
+      setValidationError("Please enter a valid email address.");
+      return false;
+    }
+    if (!phoneRegex.test(phoneNumber)) {
+      setValidationError("Phone number must be exactly 8 digits.");
+      return false;
+    }
+    if (!passwordRegex.test(password)) {
+      setValidationError(
+        "Password must be 6-20 characters and include at least one letter and one number."
+      );
+      return false;
+    }
+    if (password !== confirmPassword) {
+      setValidationError("Passwords do not match.");
+      return false;
+    }
+    setValidationError('');
+    return true;
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
-    if (password !== confirmPassword) {
-      setRegisterError("Passwords do not match");
+    if (!handleValidation()) {
       return;
     }
 
@@ -25,7 +58,7 @@ const Register = () => {
         username,
         password,
         email,
-        phoneNumber
+        phoneNumber,
       });
 
       if (result.status === 201) {
@@ -36,7 +69,7 @@ const Register = () => {
       }
     } catch (error) {
       if (error.response) {
-        setRegisterError(error.response.data.message || "Error registering user");
+        setRegisterError(error.response.data);
       } else {
         setRegisterError("Error registering user");
       }
@@ -44,6 +77,23 @@ const Register = () => {
     }
   };
 
+  function handleShowPassword() {
+    var x = document.getElementById("password");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+  }
+
+  function handleShowConfirmPassword() {
+    var x = document.getElementById("confirm-password");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+  }
   return (
     <div className='background-register'>
       <div className="register-container">
@@ -80,7 +130,7 @@ const Register = () => {
 
           <div className="form-group">
             <label htmlFor="phone">
-              <i className="fas fa-envelope"></i>
+              <i className="fas fa-phone"></i>
               <input
                 type="text"
                 id="phone"
@@ -93,7 +143,8 @@ const Register = () => {
             </label>
           </div>
 
-          <div className="form-group">
+          <div className="form-group" 
+          >
             <label htmlFor="password">
               <i className="fas fa-lock"></i>
               <input
@@ -106,9 +157,10 @@ const Register = () => {
                 required
               />
             </label>
+        <div onClick={handleShowPassword} className='show-password1'><img src={passwordsvg} alt="" /></div>
           </div>
 
-          <div className="form-group">
+          <div className="form-group" style={{marginTop:"-25px"}}>
             <label htmlFor="confirm-password">
               <i className="fas fa-lock"></i>
               <input
@@ -121,14 +173,18 @@ const Register = () => {
                 required
               />
             </label>
+        <div  onClick={handleShowConfirmPassword} className='show-password1'>
+          <img src={passwordsvg} alt="" />
           </div>
+          </div>
+
+          {validationError && <div style={{color:"red"}}>{validationError}</div>}
+          {registerError && <div style={{color:"red"}}>{registerError}</div>}
 
           <button type="submit" className="register-btn">
             REGISTER
           </button>
         </form>
-
-        {registerError && <div className="register-error">{registerError}</div>}
       </div>
     </div>
   );

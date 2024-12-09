@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const flightService = require("../services/flightService");
 const {
   passwordGenerator,
   renderTicketTemplate,
@@ -15,28 +16,40 @@ exports.sendTicketConfirmation = (req, res) => {
   const email = decoded.email;
   const name = decoded.username;
 
-  const templateData = { flightId, name, email, date, price, seatNumber, seatClass };
-
-  renderTicketTemplate(templateData, (err, renderedTemplate) => {
+  flightService.getFlightName(flightId, (err, result) => {
     if (err) {
-      console.error("Error rendering EJS template:", err);
-      return res.status(500).send({ success: false, error: "EJS render error" });
+      return res.status(500).send({ success: false, error: "Database error" });
     }
 
-    sendTicketEmail(email, "Ticket Confirmation", renderedTemplate, (err, result) => {
+    if (!result || result.length === 0) {
+      return res.status(404).send({ success: false, error: "Flight not found" });
+    }
+
+    const { FlightID: id ,From: flightDeparture, To: flightArrival } = result[0];
+    const templateData = { id,flightDeparture, flightArrival, name, email, date, price, seatNumber, seatClass };
+
+    renderTicketTemplate(templateData, (err, renderedTemplate) => {
       if (err) {
-        console.error("Error sending email:", err);
-        return res.status(500).send({ success: false, error: err.message });
+        console.error("Error rendering EJS template:", err);
+        return res.status(500).send({ success: false, error: "EJS render error" });
       }
-      res.status(200).send({ success: true, result });
+
+      sendTicketEmail(email, "Ticket Confirmation", renderedTemplate, (err, result) => {
+        if (err) {
+          console.error("Error sending email:", err);
+          return res.status(500).send({ success: false, error: err.message });
+        }
+        res.status(200).send({ success: true, result });
+      });
     });
   });
 };
 
-exports.resetPassword = (req, res) => {
-  const { email } = req.body;
 
-  findUserByEmail(email, (err, result) => {
+exports.resetPassword = (req, res) => {
+  const { email,username } = req.body;
+
+  findUserByEmail(email,username, (err, result) => {
     if (err) {
       console.error("Error querying the database:", err);
       return res.status(500).send("Server error occurred.");

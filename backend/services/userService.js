@@ -10,17 +10,27 @@ const registerUser = (username, password, email, phoneNumber, callback) => {
       if (err) return callback({ type: "database", message: err.message });
       if (result.length > 0) return callback({ type: "conflict", message: "User already exists" });
 
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const sql =
-        "INSERT INTO user (username, password, role, email, phoneNumber) VALUES (?, ?, 'user', ?, ?)";
+      connection.query(
+        "SELECT email FROM user WHERE email = ?",
+        [email],
+        async (err, result) => {
+          if (err) return callback({ type: "database", message: err.message });
+          if (result.length > 0) return callback({ type: "conflict", message: "Email already exists" });
 
-      connection.query(sql, [username, hashedPassword, email, phoneNumber], (err) => {
-        if (err) return callback({ type: "database", message: "Error registering user" });
-        callback(null, "User registered successfully");
-      });
+          const hashedPassword = await bcrypt.hash(password, 10);
+          const sql =
+            "INSERT INTO user (username, password, role, email, phoneNumber) VALUES (?, ?, 'user', ?, ?)";
+
+          connection.query(sql, [username, hashedPassword, email, phoneNumber], (err) => {
+            if (err) return callback({ type: "database", message: "Error registering user" });
+            callback(null, "User registered successfully");
+          });
+        }
+      );
     }
   );
 };
+
 
 const loginUser = (username, password, callback) => {
   connection.query(
@@ -62,7 +72,7 @@ const getUserProfile = (token, callback) => {
   }
 };
 
-const updateUserProfile = (token, username, email, phoneNumber, callback) => {
+const updateUserProfile = (token, username, phoneNumber, callback) => {
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
@@ -70,8 +80,8 @@ const updateUserProfile = (token, username, email, phoneNumber, callback) => {
       if (err) return callback({ type: "database", message: err.message });
       if (result.length > 0) return callback({ type: "conflict", message: "Username already exists" });
 
-      const sql = "UPDATE user SET username = ?, phoneNumber = ?, email = ? WHERE userID = ?";
-      connection.query(sql, [username, phoneNumber, email, decoded.userID], (err) => {
+      const sql = "UPDATE user SET username = ?, phoneNumber = ? WHERE userID = ?";
+      connection.query(sql, [username, phoneNumber, decoded.userID], (err) => {
         if (err) return callback({ type: "database", message: "Error updating profile" });
         callback(null, "Profile updated successfully");
       });

@@ -4,6 +4,7 @@ import axios from "axios";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
+  const [username,setUsername]=useState("");
   const [message, setMessage] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const ForgotPassword = () => {
     try {
       await axios.post("http://localhost:8080/email/forgotPass", {
         email,
+        username
       });
     } catch (e) {
       console.log(e);
@@ -29,6 +31,20 @@ const ForgotPassword = () => {
     <div className="background-register">
       <div className="register-container">
         <form onSubmit={handleForgotPassword}>
+        <div className="form-group">
+            <label htmlFor="username">
+              <i className="fas fa-envelope"></i>
+              <input
+                type="text"
+                id="email"
+                name="email"
+                placeholder="USERNAME"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </label>
+          </div>
           <div className="form-group">
             <label htmlFor="email">
               <i className="fas fa-envelope"></i>

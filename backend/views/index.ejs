@@ -32,7 +32,6 @@
         font-size: 24px;
         color: #4caf50;
         margin-bottom: 20px;
-        font-family: 'Press Start 2P', cursive;
       }
       .details,
       .ticket-info,
@@ -96,7 +95,9 @@
         <h1>Ticket Confirmation</h1>
         
         <div class="details">
-          <p><span class="label">Flight ID:</span><%= flightId %></p>
+          <p><span class="label">FlightId:</span><%= id %></p>
+          <p><span class="label">Departure:</span><%= flightDeparture %></p>
+          <p><span class="label">Arrival:</span><%= flightArrival %></p>
           <p><span class="label">Name:</span><%= name %></p>
           <p><span class="label">Email:</span><%= email %></p>
           <p><span class="label">Date:</span><%= date %></p>

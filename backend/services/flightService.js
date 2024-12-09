@@ -15,6 +15,15 @@ exports.getFlightsService = (departure, arrival, date, callback) => {
   });
 };
 
+exports.getFlightName = (flightId,callback) =>{
+  connection.query('Select * from flights where flightId=?',[flightId],(err,result)=>{
+    if(err){
+      return callback(err);
+    }
+    return callback(null,result);
+  })
+}
+
 exports.addFlightService = (flightDetails, callback) => {
   const { from, to, date, duration, price } = flightDetails;
 

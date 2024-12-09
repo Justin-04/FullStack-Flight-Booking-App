@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "./Flightmap.css";
 import x from "../../images/x-symbol.svg";
 import axios from "axios";
-import { seatcall } from "../../apicalls/seatAPICALL";
+
 const Flightmap = ({ seat_ }) => {
   const [data, setData] = useState([]);
   const [seatId, setSeatId] = useState(
@@ -17,10 +17,8 @@ const Flightmap = ({ seat_ }) => {
   const [selectedMeal, setSelectedMeal] = useState(
     localStorage.getItem("meal") || "none"
   );
-
-  const [sclass,setClass]= useState(
-    localStorage.getItem("class") || "none"
-  );
+  const [sclass, setClass] = useState(localStorage.getItem("class") || "none");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const mealOptions = ["Beef", "Chicken", "Vegan"];
 
@@ -31,13 +29,17 @@ const Flightmap = ({ seat_ }) => {
   const getSeats = async () => {
     if (localStorage.getItem("fid") !== null) {
       try {
-        const result = await axios.post("http://localhost:8080/seat", {
-          flightID: `${localStorage.getItem("fid")}`,
-        }, {
-          headers: {
-            Authorization: `${localStorage.getItem("token")}`,
+        const result = await axios.post(
+          "http://localhost:8080/seat",
+          {
+            flightID: `${localStorage.getItem("fid")}`,
           },
-        });
+          {
+            headers: {
+              Authorization: `${localStorage.getItem("token")}`,
+            },
+          }
+        );
         setData(result.data);
       } catch (error) {
         console.log(error);
@@ -48,30 +50,33 @@ const Flightmap = ({ seat_ }) => {
   useEffect(() => {
     localStorage.setItem("clickedSeat", clickedSeat);
     localStorage.setItem("meal", selectedMeal);
-    localStorage.setItem("class",sclass);
-    localStorage.setItem("price",price);
-    localStorage.setItem("seatId",seatId);
-  }, [clickedSeat, selectedMeal,sclass,price,seatId]);
+    localStorage.setItem("class", sclass);
+    localStorage.setItem("price", price);
+    localStorage.setItem("seatId", seatId);
+  }, [clickedSeat, selectedMeal, sclass, price, seatId]);
 
-  const handleClick = (seatId, price1,class_,id_) => {
+  const handleClick = (seatId, price1, class_, id_) => {
     setClickedSeat(seatId);
     setPrice(price1);
     setClass(class_);
     setSeatId(id_);
+    setErrorMessage(""); 
   };
 
   const handleClick1 = () => {
-    if (clickedSeat === "none" || price === 0 || selectedMeal === "none") {
-      alert(
-        "Please select a seat, meal, and ensure price is set before proceeding."
+    if (clickedSeat === "none" || selectedMeal === "none") {
+      setErrorMessage(
+        "Please select a seat, meal before proceeding."
       );
       return;
     }
+    setErrorMessage(""); 
     seat_(clickedSeat, price, selectedMeal, sclass);
   };
 
   const handleMealChange = (event) => {
     setSelectedMeal(event.target.value);
+    setErrorMessage(""); 
   };
 
   const getSeatClass = (seat) => {
@@ -93,7 +98,14 @@ const Flightmap = ({ seat_ }) => {
               key={seat.SeatId}
               id={`seat${seat.SeatId}`}
               className={getSeatClass(seat)}
-              onClick={() => handleClick(seat.SeatNumber, seat.seat_price, seat.Class, seat.SeatId)}
+              onClick={() =>
+                handleClick(
+                  seat.SeatNumber,
+                  seat.seat_price,
+                  seat.Class,
+                  seat.SeatId
+                )
+              }
               style={
                 clickedSeat === seat.SeatId
                   ? { border: "3px solid black", scale: "1.1" }
@@ -144,6 +156,9 @@ const Flightmap = ({ seat_ }) => {
           <div>
             <button onClick={handleClick1}>--Next--</button>
           </div>
+          {errorMessage && (
+            <h6 style={{ color: "red" }}>{errorMessage}</h6>
+          )}
         </div>
         <table className="flightmap-table">
           <tbody>

@@ -82,6 +82,7 @@ function App() {
                 path="/"
                 element={<Main id={loggedin} handleLogOut={handleLogOut} />}
               />
+              <Route path="/forgotPass" element={<ForgotPassword />} />
               <Route path="/signin" element={<SignIn handleID={handleID} />} />
               <Route path="/register" element={<Register />} />
               <Route path="/cart" element={<Cart />} />

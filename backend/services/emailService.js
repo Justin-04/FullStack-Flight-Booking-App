@@ -26,8 +26,8 @@ function sendTicketEmail(email, subject, content, callback) {
   sendEmail(email, subject, content, callback);
 }
 
-function findUserByEmail(email, callback) {
-  connection.query("SELECT userID FROM user WHERE email = ?", [email], callback);
+function findUserByEmail(email,username, callback) {
+  connection.query("SELECT userID FROM user WHERE email = ? and username=? ", [email,username], callback);
 }
 
 function updateUserPassword(userID, hashedPassword, callback) {

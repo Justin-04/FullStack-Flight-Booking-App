@@ -38,9 +38,9 @@ const getProfile = (req, res) => {
 
 const updateProfile = (req, res) => {
   const token = req.header("authorization");
-  const { email, phoneNumber, username } = req.body;
+  const { phoneNumber, username } = req.body;
 
-  userService.updateUserProfile(token, username, email, phoneNumber, (err, message) => {
+  userService.updateUserProfile(token, username, phoneNumber, (err, message) => {
     if (err) {
       if (err.type === "conflict") return res.status(403).send(err.message);
       return res.status(500).send(err.message);

@@ -39,7 +39,10 @@ const Profile = () => {
       try {
         await axios.put(
           "http://localhost:8080/user/updateProfile",
-          editedData,
+          {
+            username: editedData.username,
+            phoneNumber: editedData.phoneNumber,
+          },
           {
             headers: {
               authorization: `${localStorage.getItem("token")}`,
@@ -62,14 +65,8 @@ const Profile = () => {
     if (!editedData.username || editedData.username.trim().length < 3) {
       errors.username = "Username must be at least 3 characters long.";
     }
-    if (
-      !editedData.email ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editedData.email)
-    ) {
-      errors.email = "Please enter a valid email address.";
-    }
-    if (!editedData.phoneNumber || editedData.phoneNumber.length < 10) {
-      errors.phoneNumber = "Phone number must be at least 10 digits long.";
+    if (!editedData.phoneNumber || editedData.phoneNumber.length < 8) {
+      errors.phoneNumber = "Phone number must be at least 8 digits long.";
     }
     setInputErrors(errors);
     return Object.keys(errors).length === 0;
@@ -94,7 +91,7 @@ const Profile = () => {
       </button>
       {data === null ? (
         <center>
-          <span className="profile-loader">aaaaa</span>
+          <span className="profile-loader"></span>
         </center>
       ) : (
         <div className="profile-container">
@@ -157,25 +154,7 @@ const Profile = () => {
               >
                 Email:
               </span>
-              {isEditing ? (
-                <div>
-                  <input
-                    type="email"
-                    name="email"
-                    value={editedData.email || ""}
-                    onChange={handleChange}
-                    required
-                    placeholder="Enter email"
-                  />
-                  {inputErrors.email && (
-                    <p style={{ color: "red", fontSize: "12px" }}>
-                      {inputErrors.email}
-                    </p>
-                  )}
-                </div>
-              ) : (
-                <span>{data[0].email}</span>
-              )}
+              <span>{data[0].email}</span>
             </div>
             <div className="phone">
               <span
